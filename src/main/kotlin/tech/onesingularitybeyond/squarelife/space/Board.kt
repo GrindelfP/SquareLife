@@ -1,10 +1,10 @@
-package tech.equisingularity.squarelife.space
+package tech.onesingularitybeyond.squarelife.space
 
-import tech.equisingularity.squarelife.BoardTile
-import tech.equisingularity.squarelife.Color
-import tech.equisingularity.squarelife.Constants.GAP
-import tech.equisingularity.squarelife.EntitySize.MIN_ENTITY_AREA_SIDE_SIZE
-import tech.equisingularity.squarelife.Tile
+import tech.onesingularitybeyond.squarelife.BoardTile
+import tech.onesingularitybeyond.squarelife.Color
+import tech.onesingularitybeyond.squarelife.Constants.GAP
+import tech.onesingularitybeyond.squarelife.EntitySize.MIN_ENTITY_AREA_SIDE_SIZE
+import tech.onesingularitybeyond.squarelife.Tile
 
 /**
  * Board class which represents the game board.

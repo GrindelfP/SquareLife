@@ -1,4 +1,4 @@
-package tech.equisingularity.squarelife.space
+package tech.onesingularitybeyond.squarelife.space
 
 /**
  * An interface for visualizing the board.

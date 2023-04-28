@@ -1,9 +1,9 @@
-package tech.equisingularity.squarelife.powers
+package tech.onesingularitybeyond.squarelife.powers
 
-import tech.equisingularity.squarelife.space.Board
-import tech.equisingularity.squarelife.space.ConsoleBoardVisualizer
-import tech.equisingularity.squarelife.entities.Population
-import tech.equisingularity.squarelife.space.Visualizer
+import tech.onesingularitybeyond.squarelife.space.Board
+import tech.onesingularitybeyond.squarelife.space.ConsoleBoardVisualizer
+import tech.onesingularitybeyond.squarelife.entities.Population
+import tech.onesingularitybeyond.squarelife.space.Visualizer
 
 /**
  * Class for updating the board with the occurred changes in population. Contains

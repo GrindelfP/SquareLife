@@ -1,6 +1,6 @@
-package tech.equisingularity.squarelife
+package tech.onesingularitybeyond.squarelife
 
-import tech.equisingularity.squarelife.powers.God
+import tech.onesingularitybeyond.squarelife.powers.God
 
 /**
  * The main entry point for the application.

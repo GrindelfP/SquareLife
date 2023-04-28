@@ -1,10 +1,10 @@
-package tech.equisingularity.squarelife.entities
+package tech.onesingularitybeyond.squarelife.entities
 
-import tech.equisingularity.squarelife.Color
-import tech.equisingularity.squarelife.EntitySize.KUVAHAKU_SIZE
-import tech.equisingularity.squarelife.EntitySize.KUVAT_SIZE
-import tech.equisingularity.squarelife.EntitySize.UUTISET_SIZE
-import tech.equisingularity.squarelife.space.Position
+import tech.onesingularitybeyond.squarelife.Color
+import tech.onesingularitybeyond.squarelife.EntitySize.KUVAHAKU_SIZE
+import tech.onesingularitybeyond.squarelife.EntitySize.KUVAT_SIZE
+import tech.onesingularitybeyond.squarelife.EntitySize.UUTISET_SIZE
+import tech.onesingularitybeyond.squarelife.space.Position
 import java.util.*
 import kotlin.random.Random
 

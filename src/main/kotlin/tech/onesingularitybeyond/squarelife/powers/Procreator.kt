@@ -1,9 +1,9 @@
-package tech.equisingularity.squarelife.powers
+package tech.onesingularitybeyond.squarelife.powers
 
-import tech.equisingularity.squarelife.space.Board
-import tech.equisingularity.squarelife.space.Coordinate
-import tech.equisingularity.squarelife.space.Position
-import tech.equisingularity.squarelife.entities.*
+import tech.onesingularitybeyond.squarelife.space.Board
+import tech.onesingularitybeyond.squarelife.space.Coordinate
+import tech.onesingularitybeyond.squarelife.space.Position
+import tech.onesingularitybeyond.squarelife.entities.*
 
 /**
  * Class responsible for procreation of entities. It has the following properties passed as parameters:

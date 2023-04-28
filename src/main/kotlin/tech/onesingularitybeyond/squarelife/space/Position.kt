@@ -1,6 +1,6 @@
-package tech.equisingularity.squarelife.space
+package tech.onesingularitybeyond.squarelife.space
 
-import tech.equisingularity.squarelife.Color
+import tech.onesingularitybeyond.squarelife.Color
 
 /**
  * Class, representing position on the board in integer coordinates - x and y.

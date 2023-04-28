@@ -1,6 +1,6 @@
-package tech.equisingularity.squarelife.powers
+package tech.onesingularitybeyond.squarelife.powers
 
-import tech.equisingularity.squarelife.entities.*
+import tech.onesingularitybeyond.squarelife.entities.*
 
 /**
  * This class is responsible for the death of entities. It contains properties:

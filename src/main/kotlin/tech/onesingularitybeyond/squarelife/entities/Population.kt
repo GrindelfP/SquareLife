@@ -1,10 +1,10 @@
-package tech.equisingularity.squarelife.entities
+package tech.onesingularitybeyond.squarelife.entities
 
-import tech.equisingularity.squarelife.EntitySize
-import tech.equisingularity.squarelife.space.Board
-import tech.equisingularity.squarelife.space.Coordinate
-import tech.equisingularity.squarelife.space.EntityPosition
-import tech.equisingularity.squarelife.space.Position
+import tech.onesingularitybeyond.squarelife.EntitySize
+import tech.onesingularitybeyond.squarelife.space.Board
+import tech.onesingularitybeyond.squarelife.space.Coordinate
+import tech.onesingularitybeyond.squarelife.space.EntityPosition
+import tech.onesingularitybeyond.squarelife.space.Position
 import kotlin.random.Random
 
 /**

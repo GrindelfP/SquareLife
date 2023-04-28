@@ -1,6 +1,6 @@
-package tech.equisingularity.squarelife.powers
+package tech.onesingularitybeyond.squarelife.powers
 
-import tech.equisingularity.squarelife.entities.Population
+import tech.onesingularitybeyond.squarelife.entities.Population
 
 /**
  * This class is responsible for moving entities. It contains properties:

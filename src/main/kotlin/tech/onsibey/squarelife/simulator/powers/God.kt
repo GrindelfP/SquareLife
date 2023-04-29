@@ -1,9 +1,11 @@
 package tech.onsibey.squarelife.simulator.powers
 
+import tech.onsibey.squarelife.detector.datainterpreter.Detector
 import tech.onsibey.squarelife.simulator.entities.Population
 import tech.onsibey.squarelife.simulator.entities.Population.Companion.generatePopulation
 import tech.onsibey.squarelife.simulator.world.Board
 import tech.onsibey.squarelife.simulator.world.BoardSize
+import java.util.*
 
 /**
  * The main object of the game. Is the game processor and controls everything.
@@ -30,33 +32,67 @@ object God {
     private val procreator: Procreator
     private val death: Death
     private val mover: Mover
+    private val evolutionCyclesLimit: Int
 
-    private const val BOARD_HORIZONTAL_SIDE_SIZE = 40
-    private const val BOARD_VERTICAL_SIDE_SIZE = 40
-    private const val NUMBER_OF_KUVAHAKU_IN_POPULATION = 25
-    private const val NUMBER_OF_KUVAT_IN_POPULATION = 20
-
+    private const val STANDARD_BOARD_HORIZONTAL_SIDE_SIZE = 40
+    private const val STANDARD_BOARD_VERTICAL_SIDE_SIZE = 40
+    private const val STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION = 25
+    private const val STANDARD_NUMBER_OF_KUVAT_IN_POPULATION = 20
     private const val EVOLUTION_CYCLES_NUMBER = 90
+    private const val PHOTO_PATH = "src/main/resources/"
 
     /**
      * Initializer of the game process.
      */
     init {
-        board = Board(BoardSize(BOARD_VERTICAL_SIDE_SIZE, BOARD_HORIZONTAL_SIDE_SIZE))
-        population = generatePopulation(NUMBER_OF_KUVAHAKU_IN_POPULATION, NUMBER_OF_KUVAT_IN_POPULATION, board)
-        updater = Updater(board, population)
-        procreator = Procreator(board, population, updater)
-        death = Death(population, updater)
-        mover = Mover(population, updater)
-        updater.updateBoard(-1)
-        startEvolution()
+        if (initializationFromPhoto()) {
+            evolutionCyclesLimit = getMaximumCyclesCount()
+            println("Make sure that the photo is named with integer and placed in the following directory $PHOTO_PATH, " +
+                    "and if there is many variants the desired one is named as the greatest number")
+            val entitiesData = Detector.getSimulationInformation()
+            board = Board(entitiesData.boardSize)
+            population = generatePopulation(entitiesData.entities, board)
+            updater = Updater(board, population)
+            procreator = Procreator(board, population, updater)
+            death = Death(population, updater)
+            mover = Mover(population, updater)
+            updater.updateBoard(-1)
+            startEvolution()
+        }
+        else {
+            evolutionCyclesLimit = EVOLUTION_CYCLES_NUMBER
+            board = Board(BoardSize(STANDARD_BOARD_VERTICAL_SIDE_SIZE, STANDARD_BOARD_HORIZONTAL_SIDE_SIZE))
+            population = generatePopulation(STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION, STANDARD_NUMBER_OF_KUVAT_IN_POPULATION, board)
+            updater = Updater(board, population)
+            procreator = Procreator(board, population, updater)
+            death = Death(population, updater)
+            mover = Mover(population, updater)
+            updater.updateBoard(-1)
+            startEvolution()
+        }
+    }
+
+    private fun getMaximumCyclesCount(): Int {
+        TODO()
+    }
+
+    private fun initializationFromPhoto(): Boolean {
+        println("Would you like to start the evolution from provided photo? Y/n")
+        while (true) {
+            val answer = readln()
+            when {
+                answer.uppercase(Locale.getDefault()) == "Y" -> return true
+                answer.uppercase(Locale.getDefault()) == "N" -> return false
+                else -> println("Enter Y or N!")
+            }
+        }
     }
 
     /**
      * Function for starting the evolution process.
      */
     private fun startEvolution() {
-        repeat(EVOLUTION_CYCLES_NUMBER) {
+        repeat(evolutionCyclesLimit) {
             evolutionCycle(it)
         }
     }

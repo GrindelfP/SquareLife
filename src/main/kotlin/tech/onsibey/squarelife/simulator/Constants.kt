@@ -1,7 +1,7 @@
-package tech.onsibey.squarelife
+package tech.onsibey.squarelife.simulator
 
-import tech.onsibey.squarelife.Constants.GAP
-import tech.onsibey.squarelife.Constants.TILE
+import tech.onsibey.squarelife.simulator.Constants.GAP
+import tech.onsibey.squarelife.simulator.Constants.TILE
 
 /**
  * Object-container which encapsulates constants:

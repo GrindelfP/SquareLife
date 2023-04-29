@@ -1,14 +1,14 @@
-package tech.onsibey.squarelife.powers
+package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.space.Board
-import tech.onsibey.squarelife.space.Coordinate
-import tech.onsibey.squarelife.space.Position
-import tech.onsibey.squarelife.entities.Kuvahaku
-import tech.onsibey.squarelife.entities.Kuvat
-import tech.onsibey.squarelife.entities.Population
-import tech.onsibey.squarelife.entities.Uutiset
-import tech.onsibey.squarelife.entities.Mates
-import tech.onsibey.squarelife.entities.Entity
+import tech.onsibey.squarelife.simulator.world.Board
+import tech.onsibey.squarelife.simulator.world.Coordinate
+import tech.onsibey.squarelife.simulator.world.Position
+import tech.onsibey.squarelife.simulator.entities.Kuvahaku
+import tech.onsibey.squarelife.simulator.entities.Kuvat
+import tech.onsibey.squarelife.simulator.entities.Population
+import tech.onsibey.squarelife.simulator.entities.Uutiset
+import tech.onsibey.squarelife.simulator.entities.Mates
+import tech.onsibey.squarelife.simulator.entities.Entity
 
 /**
  * Class responsible for procreation of entities. It has the following properties passed as parameters:
@@ -106,7 +106,7 @@ class Procreator(private val board: Board, private val population: Population, p
 
             // We have to update board each time a new entity is born to prevent positioning of entities after
             // procreation on the same tiles. This can result in dramatic growth of the population when a lot of entities
-            // occupy same tiles and procreation is not limited by available space
+            // occupy same tiles and procreation is not limited by available world
             board.update(population.aliveEntitiesPositions()) // update board with current alive entities positions
         }
 

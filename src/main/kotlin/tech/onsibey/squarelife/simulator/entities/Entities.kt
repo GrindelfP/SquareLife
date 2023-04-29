@@ -1,10 +1,10 @@
-package tech.onsibey.squarelife.entities
+package tech.onsibey.squarelife.simulator.entities
 
-import tech.onsibey.squarelife.Color
-import tech.onsibey.squarelife.EntitySize.KUVAHAKU_SIZE
-import tech.onsibey.squarelife.EntitySize.KUVAT_SIZE
-import tech.onsibey.squarelife.EntitySize.UUTISET_SIZE
-import tech.onsibey.squarelife.space.Position
+import tech.onsibey.squarelife.simulator.Color
+import tech.onsibey.squarelife.simulator.EntitySize.KUVAHAKU_SIZE
+import tech.onsibey.squarelife.simulator.EntitySize.KUVAT_SIZE
+import tech.onsibey.squarelife.simulator.EntitySize.UUTISET_SIZE
+import tech.onsibey.squarelife.simulator.world.Position
 import java.util.UUID.randomUUID
 import kotlin.random.Random
 
@@ -28,7 +28,7 @@ sealed class Entity(
     abstract val size: Int
 
     /**
-     * Function validates entity position. Requires entity to occupy exact same space, as it needs.
+     * Function validates entity position. Requires entity to occupy exact same world, as it needs.
      */
     // Class<in Entity> can be replaced by String that reflects entity name
     fun validate(entity: Class<in Entity>, area: Int) {

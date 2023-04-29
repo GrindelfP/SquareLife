@@ -1,10 +1,10 @@
-package tech.onsibey.squarelife.powers
+package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.entities.Population
-import tech.onsibey.squarelife.entities.Entity
-import tech.onsibey.squarelife.entities.Kuvahaku
-import tech.onsibey.squarelife.entities.Kuvat
-import tech.onsibey.squarelife.entities.Uutiset
+import tech.onsibey.squarelife.simulator.entities.Population
+import tech.onsibey.squarelife.simulator.entities.Entity
+import tech.onsibey.squarelife.simulator.entities.Kuvahaku
+import tech.onsibey.squarelife.simulator.entities.Kuvat
+import tech.onsibey.squarelife.simulator.entities.Uutiset
 
 /**
  * This class is responsible for the death of entities. It contains properties:

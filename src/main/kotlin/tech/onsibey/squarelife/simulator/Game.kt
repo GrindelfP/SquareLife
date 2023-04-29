@@ -1,6 +1,6 @@
-package tech.onsibey.squarelife
+package tech.onsibey.squarelife.simulator
 
-import tech.onsibey.squarelife.powers.God
+import tech.onsibey.squarelife.simulator.powers.God
 
 /**
  * The main entry point for the application.

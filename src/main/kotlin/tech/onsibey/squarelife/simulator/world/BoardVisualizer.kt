@@ -1,4 +1,4 @@
-package tech.onsibey.squarelife.space
+package tech.onsibey.squarelife.simulator.world
 
 /**
  * An interface for visualizing the board.

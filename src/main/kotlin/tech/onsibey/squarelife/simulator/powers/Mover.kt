@@ -1,6 +1,6 @@
-package tech.onsibey.squarelife.powers
+package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.entities.Population
+import tech.onsibey.squarelife.simulator.entities.Population
 
 /**
  * This class is responsible for moving entities. It contains properties:

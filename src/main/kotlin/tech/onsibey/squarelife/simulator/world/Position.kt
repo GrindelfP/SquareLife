@@ -1,6 +1,6 @@
-package tech.onsibey.squarelife.space
+package tech.onsibey.squarelife.simulator.world
 
-import tech.onsibey.squarelife.Color
+import tech.onsibey.squarelife.simulator.Color
 
 /**
  * Class, representing position on the board in integer coordinates - x and y.

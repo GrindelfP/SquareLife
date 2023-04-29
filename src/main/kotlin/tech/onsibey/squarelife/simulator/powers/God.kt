@@ -1,9 +1,9 @@
-package tech.onsibey.squarelife.powers
+package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.entities.Population
-import tech.onsibey.squarelife.entities.Population.Companion.generatePopulation
-import tech.onsibey.squarelife.space.Board
-import tech.onsibey.squarelife.space.BoardSize
+import tech.onsibey.squarelife.simulator.entities.Population
+import tech.onsibey.squarelife.simulator.entities.Population.Companion.generatePopulation
+import tech.onsibey.squarelife.simulator.world.Board
+import tech.onsibey.squarelife.simulator.world.BoardSize
 
 /**
  * The main object of the game. Is the game processor and controls everything.

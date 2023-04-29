@@ -1,9 +1,9 @@
-package tech.onsibey.squarelife.powers
+package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.space.Board
-import tech.onsibey.squarelife.space.ConsoleBoardVisualizer
-import tech.onsibey.squarelife.entities.Population
-import tech.onsibey.squarelife.space.Visualizer
+import tech.onsibey.squarelife.simulator.world.Board
+import tech.onsibey.squarelife.simulator.world.ConsoleBoardVisualizer
+import tech.onsibey.squarelife.simulator.entities.Population
+import tech.onsibey.squarelife.simulator.world.Visualizer
 
 /**
  * Class for updating the board with the occurred changes in population. Contains

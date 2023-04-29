@@ -16,6 +16,8 @@ data class Coordinate(val x: Int, val y: Int)
  */
 data class Position(val coordinates: Set<Coordinate>, private val board: Board) {
 
+    constructor(coordinates: Set<Coordinate>) : this(coordinates, Board(20))
+
     /**
      * Function to detect possible move coordinates.
      */

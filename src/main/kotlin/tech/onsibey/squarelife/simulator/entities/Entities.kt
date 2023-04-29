@@ -30,8 +30,7 @@ sealed class Entity(
     /**
      * Function validates entity position. Requires entity to occupy exact same world, as it needs.
      */
-    // Class<in Entity> can be replaced by String that reflects entity name
-    fun validate(entity: Class<in Entity>, area: Int) {
+    fun validate(entity: Class<in Entity>, area: Int) {  // Class<in Entity> can be replaced by String that reflects entity name
         require(position.coordinates.size == area) {
             "${entity.simpleName} must occupy $area coordinates, number of supplied coordinates is " +
                     "${position.coordinates.size}"

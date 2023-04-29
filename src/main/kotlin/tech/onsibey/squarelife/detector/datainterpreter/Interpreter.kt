@@ -9,8 +9,8 @@ import tech.onsibey.squarelife.simulator.entities.Entity
 import tech.onsibey.squarelife.simulator.entities.Kuvahaku
 import tech.onsibey.squarelife.simulator.entities.Kuvat
 import tech.onsibey.squarelife.simulator.entities.Uutiset
-import tech.onsibey.squarelife.simulator.world.Coordinate
-import tech.onsibey.squarelife.simulator.world.Position
+import tech.onsibey.squarelife.common.Coordinate
+import tech.onsibey.squarelife.common.Position
 
 /**
  * Object which contains functionality for interpreting the received raw image
@@ -34,15 +34,15 @@ object Interpreter {
                 if (rows[j][i].isPainted) { // all entity cases
                     if (rows[j][i + 1].isPainted) { // Kuvat and Uutiset cases
                         if (rows[j][i + 2].isPainted) { // Uutiset case
-                            entities.add(initUutiset(topRightX = i, topRightY = j))
-                            freeEntitySpace(topRightX = i,
-                                topRightY = j, imageBoard = imageBoard, entitySize = UUTISET_SIZE)
+                            entities.add(initUutiset(topLeftX = i, topLeftY = j))
+                            freeEntitySpace(topLeftX = i,
+                                topLeftY = j, imageBoard = imageBoard, entitySize = UUTISET_SIZE)
                         }
-                        entities.add(initKuvat(topRightX = i, topRightY = j))
-                        freeEntitySpace(topRightX = i, topRightY = j, imageBoard = imageBoard, entitySize = KUVAT_SIZE)
+                        entities.add(initKuvat(topLeftX = i, topLeftY = j))
+                        freeEntitySpace(topLeftX = i, topLeftY = j, imageBoard = imageBoard, entitySize = KUVAT_SIZE)
                     }
                     entities.add(initKuvahaku(x = i, y = j))
-                    freeEntitySpace(topRightX = i, topRightY = j, imageBoard = imageBoard, entitySize = KUVAHAKU_SIZE)
+                    freeEntitySpace(topLeftX = i, topLeftY = j, imageBoard = imageBoard, entitySize = KUVAHAKU_SIZE)
                 }
             }
         }
@@ -53,28 +53,26 @@ object Interpreter {
     /**
      * Function frees the occupied by entity
      */
-    private fun freeEntitySpace(topRightX: Int, topRightY: Int, imageBoard: ImageBoard, entitySize: Int) {
-        var x = topRightX
-        var y = topRightY
-        repeat(entitySize) {
-            repeat(entitySize) {
-                imageBoard.cells[y++][x++].reverseState()
+    private fun freeEntitySpace(topLeftX: Int, topLeftY: Int, imageBoard: ImageBoard, entitySize: Int) {
+        repeat(entitySize) { entityRow ->
+            repeat(entitySize) { entityColumn ->
+                imageBoard.cells[topLeftY + entityRow][topLeftX + entityColumn].reverseState()
             }
         }
     }
 
-    private fun initUutiset(topRightX: Int, topRightY: Int) = Uutiset(
+    private fun initUutiset(topLeftX: Int, topLeftY: Int) = Uutiset(
         Position(
             setOf(
-                Coordinate(x = topRightX, y = topRightY),
-                Coordinate(x = topRightX + 1, y = topRightY),
-                Coordinate(x = topRightX + 2, y = topRightY),
-                Coordinate(x = topRightX, y = topRightY + 1),
-                Coordinate(x = topRightX + 1, y = topRightY + 1),
-                Coordinate(x = topRightX + 2, y = topRightY + 1),
-                Coordinate(x = topRightX, y = topRightY + 2),
-                Coordinate(x = topRightX + 1, y = topRightY + 2),
-                Coordinate(x = topRightX + 2, y = topRightY + 2)
+                Coordinate(x = topLeftX, y = topLeftY),
+                Coordinate(x = topLeftX + 1, y = topLeftY),
+                Coordinate(x = topLeftX + 2, y = topLeftY),
+                Coordinate(x = topLeftX, y = topLeftY + 1),
+                Coordinate(x = topLeftX + 1, y = topLeftY + 1),
+                Coordinate(x = topLeftX + 2, y = topLeftY + 1),
+                Coordinate(x = topLeftX, y = topLeftY + 2),
+                Coordinate(x = topLeftX + 1, y = topLeftY + 2),
+                Coordinate(x = topLeftX + 2, y = topLeftY + 2)
             )
         )
     )
@@ -87,13 +85,13 @@ object Interpreter {
         )
     )
 
-    private fun initKuvat(topRightX: Int, topRightY: Int) = Kuvat(
+    private fun initKuvat(topLeftX: Int, topLeftY: Int) = Kuvat(
         Position(
             setOf(
-                Coordinate(x = topRightX, y = topRightY),
-                Coordinate(x = topRightX + 1, y = topRightY),
-                Coordinate(x = topRightX, y = topRightY + 1),
-                Coordinate(x = topRightX + 1, y = topRightY + 1)
+                Coordinate(x = topLeftX, y = topLeftY),
+                Coordinate(x = topLeftX + 1, y = topLeftY),
+                Coordinate(x = topLeftX, y = topLeftY + 1),
+                Coordinate(x = topLeftX + 1, y = topLeftY + 1)
             )
         )
     )

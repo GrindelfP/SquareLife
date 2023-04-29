@@ -1,11 +1,11 @@
-package tech.onesingularitybeyond.squarelife.entities
+package tech.onsibey.squarelife.entities
 
-import tech.onesingularitybeyond.squarelife.Color
-import tech.onesingularitybeyond.squarelife.EntitySize.KUVAHAKU_SIZE
-import tech.onesingularitybeyond.squarelife.EntitySize.KUVAT_SIZE
-import tech.onesingularitybeyond.squarelife.EntitySize.UUTISET_SIZE
-import tech.onesingularitybeyond.squarelife.space.Position
-import java.util.*
+import tech.onsibey.squarelife.Color
+import tech.onsibey.squarelife.EntitySize.KUVAHAKU_SIZE
+import tech.onsibey.squarelife.EntitySize.KUVAT_SIZE
+import tech.onsibey.squarelife.EntitySize.UUTISET_SIZE
+import tech.onsibey.squarelife.space.Position
+import java.util.UUID.randomUUID
 import kotlin.random.Random
 
 /**
@@ -20,7 +20,7 @@ import kotlin.random.Random
  */
 sealed class Entity(
     private var position: Position,
-    val id: String = UUID.randomUUID().toString(),
+    val id: String = randomUUID().toString(),
     var alive: Boolean = true
 ) {
 

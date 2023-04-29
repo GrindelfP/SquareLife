@@ -1,7 +1,7 @@
-package tech.onesingularitybeyond.squarelife
+package tech.onsibey.squarelife
 
-import tech.onesingularitybeyond.squarelife.Constants.GAP
-import tech.onesingularitybeyond.squarelife.Constants.TILE
+import tech.onsibey.squarelife.Constants.GAP
+import tech.onsibey.squarelife.Constants.TILE
 
 /**
  * Object-container which encapsulates constants:

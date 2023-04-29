@@ -1,9 +1,14 @@
-package tech.onesingularitybeyond.squarelife.powers
+package tech.onsibey.squarelife.powers
 
-import tech.onesingularitybeyond.squarelife.space.Board
-import tech.onesingularitybeyond.squarelife.space.Coordinate
-import tech.onesingularitybeyond.squarelife.space.Position
-import tech.onesingularitybeyond.squarelife.entities.*
+import tech.onsibey.squarelife.space.Board
+import tech.onsibey.squarelife.space.Coordinate
+import tech.onsibey.squarelife.space.Position
+import tech.onsibey.squarelife.entities.Kuvahaku
+import tech.onsibey.squarelife.entities.Kuvat
+import tech.onsibey.squarelife.entities.Population
+import tech.onsibey.squarelife.entities.Uutiset
+import tech.onsibey.squarelife.entities.Mates
+import tech.onsibey.squarelife.entities.Entity
 
 /**
  * Class responsible for procreation of entities. It has the following properties passed as parameters:

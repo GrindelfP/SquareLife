@@ -1,6 +1,6 @@
-package tech.onesingularitybeyond.squarelife
+package tech.onsibey.squarelife
 
-import tech.onesingularitybeyond.squarelife.powers.God
+import tech.onsibey.squarelife.powers.God
 
 /**
  * The main entry point for the application.

@@ -13,7 +13,8 @@ D*) How to recognize the photo's information?
 1. CREATE data container "Mailman" for holding information about entities and their positions.
 This task is partially done by now, because the Entity class already holds all needed information.
 2. REMAKE GOD's functionality, so it receives the "Mailman" with list of entities. As far as the Entity
-type already contains 
+type already contains the information of its kind and coordinates, Mailman consists of the list of the Entity
+and the size of the board.
 
 
 ### C)

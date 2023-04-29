@@ -4,7 +4,7 @@ import tech.onsibey.squarelife.simulator.Color
 import tech.onsibey.squarelife.simulator.EntitySize.KUVAHAKU_SIZE
 import tech.onsibey.squarelife.simulator.EntitySize.KUVAT_SIZE
 import tech.onsibey.squarelife.simulator.EntitySize.UUTISET_SIZE
-import tech.onsibey.squarelife.simulator.world.Position
+import tech.onsibey.squarelife.common.Position
 import java.util.UUID.randomUUID
 import kotlin.random.Random
 

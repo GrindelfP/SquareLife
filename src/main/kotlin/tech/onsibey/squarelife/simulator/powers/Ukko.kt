@@ -17,7 +17,7 @@ import tech.onsibey.squarelife.simulator.entities.Population
  * - mover: the movement of the entities.
  */
 class Ukko(mail: Mailman, private val evolutionCycleLimit: Int = 90) {
-    private val population: Population = Population.generatePopulation(mail.entities, mail.board)
+    private val population: Population = Population.generatePopulation(mail.entities)
     private val updater: Updater = Updater(mail.board, population)
     private val procreator: Procreator = Procreator(mail.board, population, updater)
     private val death: Death = Death(population, updater)

@@ -1,9 +1,9 @@
 package tech.onsibey.squarelife.detector.datainterpreter
 
 import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
-import tech.onsibey.squarelife.simulator.EntitySize.KUVAHAKU_SIZE
-import tech.onsibey.squarelife.simulator.EntitySize.KUVAT_SIZE
-import tech.onsibey.squarelife.simulator.EntitySize.UUTISET_SIZE
+import tech.onsibey.squarelife.common.EntitySize.KUVAHAKU_SIZE
+import tech.onsibey.squarelife.common.EntitySize.KUVAT_SIZE
+import tech.onsibey.squarelife.common.EntitySize.UUTISET_SIZE
 import tech.onsibey.squarelife.simulator.entities.Entity
 import tech.onsibey.squarelife.simulator.entities.Kuvahaku
 import tech.onsibey.squarelife.simulator.entities.Kuvat

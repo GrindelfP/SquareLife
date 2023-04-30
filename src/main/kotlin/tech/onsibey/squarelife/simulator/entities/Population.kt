@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife.simulator.entities
 
-import tech.onsibey.squarelife.simulator.EntitySize
+import tech.onsibey.squarelife.common.EntitySize
 import tech.onsibey.squarelife.common.Board
 import tech.onsibey.squarelife.common.Coordinate
 import tech.onsibey.squarelife.common.EntityPosition
@@ -96,7 +96,7 @@ data class Population(
      * Companion object containing static functions for generating population and initializing entities.
      */
     companion object {
-        fun generatePopulation(entities: List<Entity>, board: Board): Population {
+        fun generatePopulation(entities: List<Entity>): Population {
             var uutiset: Uutiset? = null
             val kuvahakus = mutableListOf<Kuvahaku>()
             val kuvats = mutableListOf<Kuvat>()

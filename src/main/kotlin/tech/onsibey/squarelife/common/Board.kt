@@ -1,10 +1,10 @@
 package tech.onsibey.squarelife.common
 
-import tech.onsibey.squarelife.simulator.BoardTile
-import tech.onsibey.squarelife.simulator.Color
-import tech.onsibey.squarelife.simulator.Constants.GAP
-import tech.onsibey.squarelife.simulator.EntitySize.MIN_ENTITY_AREA_SIDE_SIZE
-import tech.onsibey.squarelife.simulator.Tile
+import tech.onsibey.squarelife.common.EntitySize.MIN_ENTITY_AREA_SIDE_SIZE
+import tech.onsibey.squarelife.visualisation.BoardTile
+import tech.onsibey.squarelife.visualisation.Color
+import tech.onsibey.squarelife.visualisation.Constants.GAP
+import tech.onsibey.squarelife.visualisation.Tile
 
 /**
  * Board class which represents the game board.

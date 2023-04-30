@@ -1,11 +1,11 @@
 package tech.onsibey.squarelife.usercommunication
 
+import tech.onsibey.squarelife.common.EntitySize.PHOTO_DIRECTORY_PATH
 import java.io.File
 import java.util.Locale
 
 object Communicator {
 
-    private const val PHOTO_DIRECTORY_PATH = "../../../../src/main/resources/"
 
     fun greetUser() {
         println("Welcome to the Square Life!")

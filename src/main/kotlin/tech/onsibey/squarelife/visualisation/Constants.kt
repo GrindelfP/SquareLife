@@ -1,7 +1,4 @@
-package tech.onsibey.squarelife.simulator
-
-import tech.onsibey.squarelife.simulator.Constants.GAP
-import tech.onsibey.squarelife.simulator.Constants.TILE
+package tech.onsibey.squarelife.visualisation
 
 /**
  * Object-container which encapsulates constants:
@@ -11,20 +8,6 @@ import tech.onsibey.squarelife.simulator.Constants.TILE
 object Constants {
     const val TILE = "██"
     const val GAP = " "
-}
-
-/**
- * Object-container which encapsulates constants:
- * - KUVAHAKU_SIZE: the size of a Kuvahaku
- * - KUVAT_SIZE: the size of a Kuvat
- * - UUTISET_SIZE: the size of an Uutiset
- * - MIN_ENTITY_AREA_SIDE_SIZE: the minimum size of an entity area side
- */
-object EntitySize {
-    const val KUVAHAKU_SIZE = 1
-    const val KUVAT_SIZE = 2
-    const val UUTISET_SIZE = 3
-    const val MIN_ENTITY_AREA_SIDE_SIZE = UUTISET_SIZE + 2
 }
 
 /**
@@ -51,7 +34,7 @@ enum class Color(val value: String) {
  * It combines a TILE const symbol with a GAP const symbol and a color value.
  */
 open class Tile(private val color: Color) {
-    private val symbol = TILE + GAP
+    private val symbol = Constants.TILE + Constants.GAP
 
     /**
      * Function overrides toString() method. Returns this instance of Tile as a

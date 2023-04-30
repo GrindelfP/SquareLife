@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.simulator.world.Board
+import tech.onsibey.squarelife.common.Board
 import tech.onsibey.squarelife.common.Coordinate
 import tech.onsibey.squarelife.common.Position
 import tech.onsibey.squarelife.simulator.entities.Kuvahaku

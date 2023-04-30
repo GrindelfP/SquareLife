@@ -1,7 +1,7 @@
 package tech.onsibey.squarelife.simulator.entities
 
 import tech.onsibey.squarelife.simulator.EntitySize
-import tech.onsibey.squarelife.simulator.world.Board
+import tech.onsibey.squarelife.common.Board
 import tech.onsibey.squarelife.common.Coordinate
 import tech.onsibey.squarelife.common.EntityPosition
 import tech.onsibey.squarelife.common.Position
@@ -97,7 +97,20 @@ data class Population(
      */
     companion object {
         fun generatePopulation(entities: List<Entity>, board: Board): Population {
-            TODO()
+            var uutiset: Uutiset? = null
+            val kuvahakus = mutableListOf<Kuvahaku>()
+            val kuvats = mutableListOf<Kuvat>()
+            entities.forEach { entity ->
+                when (entity) {
+                    is Uutiset -> uutiset = entity
+                    is Kuvahaku -> kuvahakus.add(entity)
+                    is Kuvat -> kuvats.add(entity)
+                }
+            }
+
+            val validatedUutiset = requireNotNull(uutiset) { "Uutiset is not found" }
+
+            return Population(validatedUutiset, kuvahakus, kuvats)
         }
 
         /**

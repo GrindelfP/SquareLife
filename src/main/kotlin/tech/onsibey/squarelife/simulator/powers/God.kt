@@ -52,24 +52,19 @@ object God {
             val entitiesData = Detector.getSimulationInformation()
             board = Board(entitiesData.boardSize)
             population = generatePopulation(entitiesData.entities, board)
-            updater = Updater(board, population)
-            procreator = Procreator(board, population, updater)
-            death = Death(population, updater)
-            mover = Mover(population, updater)
-            updater.updateBoard(-1)
-            startEvolution()
+
         }
         else {
             evolutionCyclesLimit = EVOLUTION_CYCLES_NUMBER
             board = Board(BoardSize(STANDARD_BOARD_VERTICAL_SIDE_SIZE, STANDARD_BOARD_HORIZONTAL_SIDE_SIZE))
             population = generatePopulation(STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION, STANDARD_NUMBER_OF_KUVAT_IN_POPULATION, board)
-            updater = Updater(board, population)
-            procreator = Procreator(board, population, updater)
-            death = Death(population, updater)
-            mover = Mover(population, updater)
-            updater.updateBoard(-1)
-            startEvolution()
         }
+        updater = Updater(board, population)
+        procreator = Procreator(board, population, updater)
+        death = Death(population, updater)
+        mover = Mover(population, updater)
+        updater.updateBoard(-1)
+        startEvolution()
     }
 
     private fun getMaximumCyclesCount(): Int {

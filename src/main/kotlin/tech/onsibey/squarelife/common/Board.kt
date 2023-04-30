@@ -1,7 +1,5 @@
-package tech.onsibey.squarelife.simulator.world
+package tech.onsibey.squarelife.common
 
-import tech.onsibey.squarelife.common.Coordinate
-import tech.onsibey.squarelife.common.EntityPosition
 import tech.onsibey.squarelife.simulator.BoardTile
 import tech.onsibey.squarelife.simulator.Color
 import tech.onsibey.squarelife.simulator.Constants.GAP

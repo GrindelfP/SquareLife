@@ -96,6 +96,10 @@ data class Population(
      * Companion object containing static functions for generating population and initializing entities.
      */
     companion object {
+        fun generatePopulation(entities: List<Entity>, board: Board): Population {
+            TODO()
+        }
+
         /**
          * Function generates a population of entities.
          * It requires that the board is suitable for the population by height and width.

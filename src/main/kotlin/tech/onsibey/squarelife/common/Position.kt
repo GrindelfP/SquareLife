@@ -1,7 +1,6 @@
 package tech.onsibey.squarelife.common
 
 import tech.onsibey.squarelife.simulator.Color
-import tech.onsibey.squarelife.simulator.world.Board
 
 /**
  * Class, representing position on the board in integer coordinates - x and y.
@@ -16,8 +15,6 @@ data class Coordinate(val x: Int, val y: Int)
  * @param board board on which the entity is placed.
  */
 data class Position(val coordinates: Set<Coordinate>, private val board: Board) {
-
-    constructor(coordinates: Set<Coordinate>) : this(coordinates, Board(20))
 
     /**
      * Function to detect possible move coordinates.

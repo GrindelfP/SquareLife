@@ -32,20 +32,22 @@ class Interpreter(private val imageBoard: ImageBoard) {
      */
     private fun interpretBoard(): List<Entity> {
         val entities = mutableListOf<Entity>()
-        val rows = imageBoard.cells
-        for (j in rows.indices) {
-            for (i in rows[j].indices) {
-                if (rows[j][i].isPainted) { // all entity cases
-                    if (rows[j][i + 1].isPainted) { // Kuvat and Uutiset cases
-                        if (rows[j][i + 2].isPainted) { // Uutiset case
+        //val rows = imageBoard.cells
+        for (j in imageBoard.cells.indices) {
+            for (i in imageBoard.cells[j].indices) {
+                if (imageBoard.cells[j][i].isPainted) { // all entity cases
+                    if (imageBoard.cells[j][i + 1].isPainted) { // Kuvat and Uutiset cases
+                        if (imageBoard.cells[j][i + 2].isPainted) { // Uutiset case
                             entities.add(initUutiset(topLeftX = i, topLeftY = j))
                             freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = UUTISET_SIZE)
+                        } else {
+                            entities.add(initKuvat(topLeftX = i, topLeftY = j))
+                            freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = KUVAT_SIZE)
                         }
-                        entities.add(initKuvat(topLeftX = i, topLeftY = j))
-                        freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = KUVAT_SIZE)
+                    } else {
+                        entities.add(initKuvahaku(x = i, y = j))
+                        freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = KUVAHAKU_SIZE)
                     }
-                    entities.add(initKuvahaku(x = i, y = j))
-                    freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = KUVAHAKU_SIZE)
                 }
             }
         }

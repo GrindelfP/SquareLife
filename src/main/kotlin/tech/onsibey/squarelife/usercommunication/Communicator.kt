@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife.usercommunication
 
-import tech.onsibey.squarelife.common.EntitySize.PHOTO_DIRECTORY_PATH
+import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
 import java.io.File
 import java.util.Locale
 
@@ -26,22 +26,34 @@ object Communicator {
     fun askNumberOfCycles(): Int {
         print(
             "Enter, how much cycles should pass during the simulation. " +
-                    "If you want to go with default value, enter 0: "
+                    "If you want to go with default value ($DEFAULT_EVOLUTION_CYCLES_LIMIT cycles), enter d: "
         )
-        while (true) {
-            try {
-                return readln().toInt()
-            } catch (e: NumberFormatException) {
-                println("Enter an integer number!")
+
+        return when (val input = readln()) {
+            "d" -> DEFAULT_EVOLUTION_CYCLES_LIMIT
+            else -> {
+                try {
+                    input.toInt()
+                } catch (e: NumberFormatException) {
+                    println("Your input was not a number so I will go with default value " +
+                            "($DEFAULT_EVOLUTION_CYCLES_LIMIT cycles).")
+                    DEFAULT_EVOLUTION_CYCLES_LIMIT
+                }
             }
         }
     }
 
     fun negotiatePhoto(): String {
-        do {
-            println("Please, place your photo in the folder src/main/resources")
-        } while (File(PHOTO_DIRECTORY_PATH).walk().any { !(it.isFile && it.name.endsWith(".jpg")) })
-
-        return PHOTO_DIRECTORY_PATH
+        var absolutePath = ""
+        while (true) {
+            print("Please, provide an absolute path to your source photo: ")
+            absolutePath = readln()
+            try {
+                File(absolutePath).walk().any { !(it.isFile && it.name.endsWith(".jpg")) }
+                return absolutePath
+            } catch (e: IllegalArgumentException) {
+                println("Photo not found in your path!")
+            }
+        }
     }
 }

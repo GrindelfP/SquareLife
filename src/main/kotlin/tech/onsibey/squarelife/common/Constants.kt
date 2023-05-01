@@ -12,8 +12,9 @@ object EntitySize {
     const val KUVAT_SIZE = 2
     const val UUTISET_SIZE = 3
     const val MIN_ENTITY_AREA_SIDE_SIZE = UUTISET_SIZE + 2
-    const val PHOTO_DIRECTORY_PATH = "../../../../src/main/resources/"
 }
+
+const val DEFAULT_EVOLUTION_CYCLES_LIMIT = 90
 
 
 

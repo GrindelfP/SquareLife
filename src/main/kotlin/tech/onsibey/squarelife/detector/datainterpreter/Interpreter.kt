@@ -4,13 +4,11 @@ import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
 import tech.onsibey.squarelife.common.EntitySize.KUVAHAKU_SIZE
 import tech.onsibey.squarelife.common.EntitySize.KUVAT_SIZE
 import tech.onsibey.squarelife.common.EntitySize.UUTISET_SIZE
-import tech.onsibey.squarelife.simulator.entities.Entity
-import tech.onsibey.squarelife.simulator.entities.Kuvahaku
-import tech.onsibey.squarelife.simulator.entities.Kuvat
-import tech.onsibey.squarelife.simulator.entities.Uutiset
 import tech.onsibey.squarelife.common.Coordinate
 import tech.onsibey.squarelife.common.Position
 import tech.onsibey.squarelife.common.Board
+import tech.onsibey.squarelife.simulator.entities.*
+import tech.onsibey.squarelife.simulator.entities.Population.Companion.toPopulation
 
 /**
  * Class which contains functionality for interpreting the received raw image
@@ -24,35 +22,42 @@ class Interpreter(private val imageBoard: ImageBoard) {
      * Function compiles the information about entities and their positioning
      * @return Mailman object, which contains a list of Entities
      */
-    fun sendMailman() = Mailman(interpretBoard(), board)
+    fun prepareMailman() = Mailman(convertToPopulation(), board)
 
     /**
      * Function interpreting the ImageBoard object into a list of entities.
      */
-    private fun interpretBoard(): List<Entity> {
+    private fun convertToPopulation(): Population {
         val entities = mutableListOf<Entity>()
         for (j in imageBoard.cells.indices) {
             for (i in imageBoard.cells[j].indices) {
-                if (kuvahakuChecked(x = i, y = j) /*&& imageBoard.cells.size != j + 10*/) {
-                    if (kuvatChecked(x = i, y = j) /*&& imageBoard.cells.size != j + 2*/) {
-                        if (uutisetChecked(x = i, y = j) /*&& imageBoard.cells.size != j + 3*/) {
-                            entities.add(initUutiset(topLeftX = i + 1, topLeftY = j + 1))
-                            freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = UUTISET_SIZE)
-                        } else {
-                            entities.add(initKuvat(topLeftX = i + 1, topLeftY = j + 1))
-                            freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = KUVAT_SIZE)
-                        }
-                    } else {
-                        entities.add(initKuvahaku(x = i + 1, y = j + 1))
-                        freeEntitySpace(topLeftX = i, topLeftY = j, entitySize = KUVAHAKU_SIZE)
-                    }
-                }
+                Coordinate(x = i, y = j).process(entities)
             }
         }
 
-        return entities
+        return entities.toPopulation()
     }
 
+    /**
+     * TODO
+     */
+    private fun Coordinate.process(entities: MutableList<Entity>) {
+        if (kuvahakuChecked(x = this.x, y = this.y)) { // case if all entities are possible
+            if (kuvatChecked(x = this.x, y = this.y)) {
+                if (uutisetChecked(x = this.x, y = this.y)) {
+                    entities.add(initUutiset(topLeftX = this.x + 1, topLeftY = this.y + 1))
+                    freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = UUTISET_SIZE)
+                } else {
+                    entities.add(initKuvat(topLeftX = this.x + 1, topLeftY = this.y + 1))
+                    freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = KUVAT_SIZE)
+                }
+            } else {
+                entities.add(initKuvahaku(x = this.x + 1, y = this.y + 1))
+                freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = KUVAHAKU_SIZE)
+            }
+        }
+    }
+    
     private fun uutisetChecked(x: Int, y: Int): Boolean {
         return imageBoard.cells.size != x + 2 && imageBoard.cells.size != y + 2 &&
                 imageBoard.cells[y][x].isPainted &&
@@ -133,4 +138,4 @@ class Interpreter(private val imageBoard: ImageBoard) {
 /**
  * Data class containing a list of Entities gotten from the image.
  */
-data class Mailman(val entities: List<Entity>, val board: Board)
+data class Mailman(val population: Population, val board: Board)

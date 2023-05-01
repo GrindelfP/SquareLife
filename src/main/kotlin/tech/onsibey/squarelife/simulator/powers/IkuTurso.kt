@@ -4,6 +4,7 @@ import tech.onsibey.squarelife.simulator.entities.Population
 import tech.onsibey.squarelife.simulator.entities.Population.Companion.generatePopulation
 import tech.onsibey.squarelife.common.Board
 import tech.onsibey.squarelife.common.BoardSize
+import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
 
 /**
  * This class is named after son of the greatest divine in the Finno-Ugrian pantheon.
@@ -37,7 +38,6 @@ object IkuTurso {
     private const val STANDARD_BOARD_VERTICAL_SIDE_SIZE = 40
     private const val STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION = 25
     private const val STANDARD_NUMBER_OF_KUVAT_IN_POPULATION = 20
-    private const val EVOLUTION_CYCLES_NUMBER = 90
 
     /**
      * Initializer of the game process.
@@ -58,7 +58,7 @@ object IkuTurso {
      * Function for starting the evolution process.
      */
     private fun startEvolution() {
-        repeat(EVOLUTION_CYCLES_NUMBER) {
+        repeat(DEFAULT_EVOLUTION_CYCLES_LIMIT) {
             evolutionCycle(it)
         }
     }

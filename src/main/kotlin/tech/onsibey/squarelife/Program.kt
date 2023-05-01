@@ -16,12 +16,9 @@ object Program {
 
         if (initializationFromPhoto()) {
             val imageBoard = Processor(negotiatePhoto()).processImageBoard()
-            val mail = Interpreter(imageBoard).sendMailman()
+            val mail = Interpreter(imageBoard).prepareMailman()
 
-            when (val numberOfCycles = askNumberOfCycles()) {
-                0 -> Ukko(mail)
-                else -> Ukko(mail, numberOfCycles)
-            }
+            Ukko(mail, askNumberOfCycles())
         }
         else IkuTurso
     }

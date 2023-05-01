@@ -83,7 +83,7 @@ class InterpreterTest {
 
     @Test
     fun `GIVEN correct test ImageBoard WHEN called sendMailman() THEN returns correct board size`() {
-        val mailMan = Interpreter(testImageBoard).sendMailman()
+        val mailMan = Interpreter(testImageBoard).prepareMailman()
 
         //assert(mailMan.boardSize == 6)
         /*assertEquals(expected = testImageBoardSize, actual = mailMan.boardSize, message = "Expected board size is $testImageBoardSize, " +
@@ -94,7 +94,7 @@ class InterpreterTest {
 
     @Test
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct number of entities`() {
-        val mailMan = Interpreter(testImageBoard).sendMailman()
+        val mailMan = Interpreter(testImageBoard).prepareMailman()
 
         assertEquals(expected = TEST_IMAGE_BOARD_POPULATION_COUNT,
             actual = mailMan.entities.size,
@@ -103,7 +103,7 @@ class InterpreterTest {
 
     @Test
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct type of entities`() {
-        val mailMan = Interpreter(testImageBoard).sendMailman()
+        val mailMan = Interpreter(testImageBoard).prepareMailman()
 
         mailMan.entities.forEachIndexed { index, entity ->
             assertThat(entity::class.simpleName).isEqualTo(testEntityNames[index])
@@ -112,7 +112,7 @@ class InterpreterTest {
 
     @Test
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct coordinates of entities`() {
-        val mailMan = Interpreter(testImageBoard).sendMailman()
+        val mailMan = Interpreter(testImageBoard).prepareMailman()
 
         mailMan.entities.forEachIndexed { index, entity ->
             assertThat(entity).isEqualTo(testEntityList[index])

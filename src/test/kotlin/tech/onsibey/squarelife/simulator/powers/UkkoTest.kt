@@ -32,8 +32,8 @@ class UkkoTest {
 
     @Test
     fun `GIVEN valid imageBoard`() {
-        val mail = Interpreter(testImageBoard).sendMailman()
+        val mail = Interpreter(testImageBoard).prepareMailman()
 
-        Ukko(mail)
+        Ukko(mail = mail, evolutionCycleLimit = 45)
     }
 }

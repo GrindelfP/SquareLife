@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
-class Processor(private val path: String) {
+class Processor(private val pathToPhoto: String) {
     fun processImageBoard(): ImageBoard {
         TODO()
     }

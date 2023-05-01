@@ -113,6 +113,23 @@ data class Population(
             return Population(validatedUutiset, kuvahakus, kuvats)
         }
 
+        fun List<Entity>.toPopulation(): Population {
+            var uutiset: Uutiset? = null
+            val kuvahakus = mutableListOf<Kuvahaku>()
+            val kuvats = mutableListOf<Kuvat>()
+            this.forEach { entity ->
+                when (entity) {
+                    is Uutiset -> uutiset = entity
+                    is Kuvahaku -> kuvahakus.add(entity)
+                    is Kuvat -> kuvats.add(entity)
+                }
+            }
+
+            val validatedUutiset = requireNotNull(uutiset) { "Uutiset is not found" }
+
+            return Population(validatedUutiset, kuvahakus, kuvats)
+        }
+
         /**
          * Function generates a population of entities.
          * It requires that the board is suitable for the population by height and width.

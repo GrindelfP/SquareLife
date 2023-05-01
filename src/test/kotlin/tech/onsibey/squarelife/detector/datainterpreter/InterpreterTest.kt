@@ -97,7 +97,7 @@ class InterpreterTest {
         val mailMan = Interpreter(testImageBoard).prepareMailman()
 
         assertEquals(expected = TEST_IMAGE_BOARD_POPULATION_COUNT,
-            actual = mailMan.entities.size,
+            actual = mailMan.population.size(),
             message = "The population should be $TEST_IMAGE_BOARD_POPULATION_COUNT, bu actually is $mailMan.entities.size")
     }
 
@@ -105,7 +105,7 @@ class InterpreterTest {
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct type of entities`() {
         val mailMan = Interpreter(testImageBoard).prepareMailman()
 
-        mailMan.entities.forEachIndexed { index, entity ->
+        mailMan.population.aliveEntities().forEachIndexed { index, entity ->
             assertThat(entity::class.simpleName).isEqualTo(testEntityNames[index])
         }
     }
@@ -114,7 +114,7 @@ class InterpreterTest {
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct coordinates of entities`() {
         val mailMan = Interpreter(testImageBoard).prepareMailman()
 
-        mailMan.entities.forEachIndexed { index, entity ->
+        mailMan.population.aliveEntities().forEachIndexed { index, entity ->
             assertThat(entity).isEqualTo(testEntityList[index])
         }
     }

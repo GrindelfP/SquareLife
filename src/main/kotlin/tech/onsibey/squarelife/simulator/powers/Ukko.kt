@@ -26,8 +26,9 @@ class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) : Jumala {
     override val procreator: Procreator = Procreator(board, population, updater)
     override val death: Death = Death(population, updater)
     override val mover: Mover = Mover(population, updater)
+    override val evolutionCycleNumber: Int = evolutionCycleLimit
 
     init {
-        startEvolution(evolutionCycleLimit)
+        startEvolution()
     }
 }

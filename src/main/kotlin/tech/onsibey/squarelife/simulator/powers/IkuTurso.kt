@@ -40,11 +40,12 @@ object IkuTurso : Jumala {
     override val death: Death = Death(population, updater)
     override val mover: Mover = Mover(population, updater)
     override val witness: Witness = Witness()
+    override val evolutionCycleNumber: Int = DEFAULT_EVOLUTION_CYCLES_LIMIT
 
     /**
      * Initializer of the game process.
      */
     init {
-        startEvolution(DEFAULT_EVOLUTION_CYCLES_LIMIT)
+        startEvolution()
     }
 }

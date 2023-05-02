@@ -12,11 +12,12 @@ sealed interface Jumala {
     val death: Death
     val board: Board
     val population: Population
+    val evolutionCycleNumber: Int
 
     /**
      * Function for starting the evolution process.
      */
-    fun startEvolution(evolutionCycleNumber: Int) {
+    fun startEvolution() {
         updater.updateBoard(-1)
         repeat(evolutionCycleNumber) {
             evolutionCycle(it)

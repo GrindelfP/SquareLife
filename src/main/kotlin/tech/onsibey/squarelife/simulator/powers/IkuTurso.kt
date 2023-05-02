@@ -1,10 +1,13 @@
 package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.simulator.entities.Population
 import tech.onsibey.squarelife.simulator.entities.Population.Companion.generatePopulation
-import tech.onsibey.squarelife.common.Board
-import tech.onsibey.squarelife.common.BoardSize
+import tech.onsibey.squarelife.simulator.entities.Board
+import tech.onsibey.squarelife.simulator.entities.BoardSize
 import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
+import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_BOARD_HORIZONTAL_SIDE_SIZE
+import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_BOARD_VERTICAL_SIDE_SIZE
+import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION
+import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_NUMBER_OF_KUVAT_IN_POPULATION
 
 /**
  * This class is named after son of the greatest divine in the Finno-Ugrian pantheon.
@@ -25,56 +28,27 @@ import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
  * - NUMBER_OF_KUVAT_IN_POPULATION: the number of Kuvat entities in the population
  * - EVOLUTION_CYCLES_NUMBER: the top limit of evolution cycles
  */
-object IkuTurso {
-
-    private val board: Board
-    private val population: Population
-    private val updater: Updater
-    private val procreator: Procreator
-    private val death: Death
-    private val mover: Mover
-
-    private const val STANDARD_BOARD_HORIZONTAL_SIDE_SIZE = 40
-    private const val STANDARD_BOARD_VERTICAL_SIDE_SIZE = 40
-    private const val STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION = 25
-    private const val STANDARD_NUMBER_OF_KUVAT_IN_POPULATION = 20
+object IkuTurso : Jumala(
+    board = Board(BoardSize(STANDARD_BOARD_VERTICAL_SIDE_SIZE, STANDARD_BOARD_HORIZONTAL_SIDE_SIZE)),
+    populationInitializer = { board ->
+        generatePopulation(STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION, STANDARD_NUMBER_OF_KUVAT_IN_POPULATION, board)
+    },
+    evolutionCycleNumber = DEFAULT_EVOLUTION_CYCLES_LIMIT
+) {
 
     /**
      * Initializer of the game process.
      */
     init {
-        board = Board(BoardSize(STANDARD_BOARD_VERTICAL_SIDE_SIZE, STANDARD_BOARD_HORIZONTAL_SIDE_SIZE))
-        population =
-            generatePopulation(STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION, STANDARD_NUMBER_OF_KUVAT_IN_POPULATION, board)
-        updater = Updater(board, population)
-        procreator = Procreator(board, population, updater)
-        death = Death(population, updater)
-        mover = Mover(population, updater)
-        updater.updateBoard(-1)
         startEvolution()
     }
-
-    /**
-     * Function for starting the evolution process.
-     */
-    private fun startEvolution() {
-        repeat(DEFAULT_EVOLUTION_CYCLES_LIMIT) {
-            evolutionCycle(it)
-        }
-    }
-
-    /**
-     * Function for evolution cycle.
-     */
-    private fun evolutionCycle(evolutionCycleNumber: Int) {
-        // 1. command entities to move
-        mover.move(evolutionCycleNumber)
-
-        // 2. check results of the movement
-        // 2.1 swallowing
-        death.processSwallowing(evolutionCycleNumber)
-
-        // 2.2 procreation
-        procreator.processProcreation(evolutionCycleNumber)
-    }
 }
+
+private object IkuTursoConstants {
+    const val STANDARD_BOARD_HORIZONTAL_SIDE_SIZE = 40
+    const val STANDARD_BOARD_VERTICAL_SIDE_SIZE = 40
+    const val STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION = 25
+    const val STANDARD_NUMBER_OF_KUVAT_IN_POPULATION = 20
+}
+
+

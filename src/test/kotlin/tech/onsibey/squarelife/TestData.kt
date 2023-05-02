@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife
 
-import tech.onsibey.squarelife.common.Coordinate
+import tech.onsibey.squarelife.simulator.entities.Coordinate
 import tech.onsibey.squarelife.detector.imageprocessor.Cell
 import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
 

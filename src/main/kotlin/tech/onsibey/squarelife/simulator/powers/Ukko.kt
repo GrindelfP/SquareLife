@@ -1,7 +1,8 @@
 package tech.onsibey.squarelife.simulator.powers
 
+import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.detector.datainterpreter.Mailman
-import tech.onsibey.squarelife.simulator.entities.Population
+import tech.onsibey.squarelife.simulator.entities.Population.Companion.toPopulation
 
 /**
  * This class is named after the greatest divine in the Finno-Ugrian pantheon.
@@ -15,38 +16,13 @@ import tech.onsibey.squarelife.simulator.entities.Population
  * - death: the death of the entities
  * - mover: the movement of the entities.
  */
-class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) {
-    private val updater: Updater = Updater(mail.board, mail.population)
-    private val procreator: Procreator = Procreator(mail.board, mail.population, updater)
-    private val death: Death = Death(mail.population, updater)
-    private val mover: Mover = Mover(mail.population, updater)
+class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) : Jumala(
+    board = Board(mail.boardSize),
+    populationInitializer = { board -> mail.entities.toPopulation(board) },
+    evolutionCycleNumber = evolutionCycleLimit
+) {
 
     init {
-        updater.updateBoard(-1)
         startEvolution()
-    }
-
-    /**
-     * Function for starting the evolution process.
-     */
-    private fun startEvolution() {
-        repeat(evolutionCycleLimit) {
-            evolutionCycle(it)
-        }
-    }
-
-    /**
-     * Function for evolution cycle.
-     */
-    private fun evolutionCycle(evolutionCycleNumber: Int) {
-        // 1. command entities to move
-        mover.move(evolutionCycleNumber)
-
-        // 2. check results of the movement
-        // 2.1 swallowing
-        death.processSwallowing(evolutionCycleNumber)
-
-        // 2.2 procreation
-        procreator.processProcreation(evolutionCycleNumber)
     }
 }

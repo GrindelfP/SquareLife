@@ -5,11 +5,11 @@ import tech.onsibey.squarelife.simulator.entities.Population
 
 sealed class Jumala(
     board: Board,
-    populationInitializator: (Board) -> Population,
+    populationInitializer: (Board) -> Population,
     private val evolutionCycleNumber: Int
 ) {
 
-    private val population: Population = populationInitializator(board)
+    private val population: Population = populationInitializer(board)
     val witness: Witness = Witness()
     private val updater: Updater = Updater(board, population)
     private val procreator: Procreator = Procreator(board, population, updater)

@@ -2,7 +2,6 @@ package tech.onsibey.squarelife.simulator.powers
 
 import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.detector.datainterpreter.Mailman
-import tech.onsibey.squarelife.simulator.entities.Population
 import tech.onsibey.squarelife.simulator.entities.Population.Companion.toPopulation
 
 /**
@@ -19,7 +18,7 @@ import tech.onsibey.squarelife.simulator.entities.Population.Companion.toPopulat
  */
 class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) : Jumala(
     board = Board(mail.boardSize),
-    populationInitializator = { board -> mail.entities.toPopulation(board) },
+    populationInitializer = { board -> mail.entities.toPopulation(board) },
     evolutionCycleNumber = evolutionCycleLimit
 ) {
 

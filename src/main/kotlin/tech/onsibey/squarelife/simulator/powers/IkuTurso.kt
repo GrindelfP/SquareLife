@@ -30,7 +30,7 @@ import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_NUMBE
  */
 object IkuTurso : Jumala(
     board = Board(BoardSize(STANDARD_BOARD_VERTICAL_SIDE_SIZE, STANDARD_BOARD_HORIZONTAL_SIDE_SIZE)),
-    populationInitializator = { board ->
+    populationInitializer = { board ->
         generatePopulation(STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION, STANDARD_NUMBER_OF_KUVAT_IN_POPULATION, board)
     },
     evolutionCycleNumber = DEFAULT_EVOLUTION_CYCLES_LIMIT

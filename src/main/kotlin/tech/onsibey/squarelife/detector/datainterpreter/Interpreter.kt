@@ -30,7 +30,7 @@ class Interpreter(private val imageBoard: ImageBoard) {
         val entities = mutableListOf<EntityInfo>()
         for (j in cells.indices) {
             for (i in cells[j].indices) {
-                Coordinate(x = i, y = j).process(entities)
+                processCoordinate(Coordinate(x = i, y = j), entities)
             }
         }
 
@@ -40,23 +40,23 @@ class Interpreter(private val imageBoard: ImageBoard) {
     /**
      * TODO
      */
-    private fun Coordinate.process(entities: MutableList<EntityInfo>) {
-        if (kuvahakuChecked(x = this.x, y = this.y)) { // case if all entities are possible
-            if (kuvatChecked(x = this.x, y = this.y)) {
-                if (uutisetChecked(x = this.x, y = this.y)) {
+    private fun processCoordinate(coordinate: Coordinate, entities: MutableList<EntityInfo>) {
+        if (kuvahakuChecked(x = coordinate.x, y = coordinate.y)) { // case if all entities are possible
+            if (kuvatChecked(x = coordinate.x, y = coordinate.y)) {
+                if (uutisetChecked(x = coordinate.x, y = coordinate.y)) {
                     entities.add(
-                        EntityInfo(Uutiset::class, initUutisetCoordinates(topLeftX = this.x + 1, topLeftY = this.y + 1))
+                        EntityInfo(Uutiset::class, initUutisetCoordinates(topLeftX = coordinate.x + 1, topLeftY = coordinate.y + 1))
                     )
-                    freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = UUTISET_SIZE)
+                    freeEntitySpace(topLeftX = coordinate.x, topLeftY = coordinate.y, entitySize = UUTISET_SIZE)
                 } else {
                     entities.add(
-                        EntityInfo(Kuvat::class, initKuvatCoordinates(topLeftX = this.x + 1, topLeftY = this.y + 1))
+                        EntityInfo(Kuvat::class, initKuvatCoordinates(topLeftX = coordinate.x + 1, topLeftY = coordinate.y + 1))
                     )
-                    freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = KUVAT_SIZE)
+                    freeEntitySpace(topLeftX = coordinate.x, topLeftY = coordinate.y, entitySize = KUVAT_SIZE)
                 }
             } else {
-                entities.add(EntityInfo(Kuvahaku::class, initKuvahakuCoordinates(x = this.x + 1, y = this.y + 1)))
-                freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = KUVAHAKU_SIZE)
+                entities.add(EntityInfo(Kuvahaku::class, initKuvahakuCoordinates(x = coordinate.x + 1, y = coordinate.y + 1)))
+                freeEntitySpace(topLeftX = coordinate.x, topLeftY = coordinate.y, entitySize = KUVAHAKU_SIZE)
             }
         }
     }

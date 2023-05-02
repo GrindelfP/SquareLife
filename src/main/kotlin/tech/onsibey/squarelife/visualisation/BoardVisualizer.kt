@@ -1,6 +1,10 @@
 package tech.onsibey.squarelife.visualisation
 
 import tech.onsibey.squarelife.simulator.entities.Board
+import tech.onsibey.squarelife.simulator.entities.EntityPosition
+import tech.onsibey.squarelife.simulator.powers.EvolutionCycle
+import tech.onsibey.squarelife.simulator.powers.EvolutionResultReport
+import tech.onsibey.squarelife.simulator.powers.PopulationSnapshot
 
 /**
  * An interface for visualizing the board.
@@ -42,6 +46,40 @@ class ConsoleBoardVisualizer(private val board: Board) : BoardVisualizer(board) 
         val message = "${generalMessage}${if (extraDescription != null) ", $extraDescription" else ""}"
 
         println(message)
+        print(board.toString())
+    }
+}
+
+class ConsoleEvolutionCycleVisualizer(private val evolutionResultReport: EvolutionResultReport) {
+
+    fun visualize() {
+       evolutionResultReport.evolutionCycles.forEach { evolutionCycle -> visualizeEvolutionCycle(evolutionCycle) }
+    }
+
+    private fun visualizeEvolutionCycle(cycle: EvolutionCycle) {
+        if (cycle.number == 0) {
+            println("Evolution hasn't started yet!")
+            printBoard(cycle.populationSnapshots.initial)
+        }
+
+        println("Evolution cycle #${cycle.number + 1}")
+        println("After movement:")
+        printBoard(cycle.populationSnapshots.afterMovement)
+
+        println("After swallowing:")
+        printBoard(cycle.populationSnapshots.afterSwallowing)
+        println("Following entities were swallowed: ${cycle.swallowed}")
+
+
+        println("After procreation:")
+        printBoard(cycle.populationSnapshots.afterProcreation)
+        println("Following entities were born: ${cycle.born}")
+
+    }
+
+    private fun printBoard(populationSnapshot: PopulationSnapshot) {
+        val board = Board(evolutionResultReport.boardSize)
+        board.update(populationSnapshot.aliveEntities.map { EntityPosition(it.position, it.type) })
         print(board.toString())
     }
 }

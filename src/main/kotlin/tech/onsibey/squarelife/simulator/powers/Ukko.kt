@@ -20,9 +20,4 @@ class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) : Jumala(
     board = Board(mail.boardSize),
     populationInitializer = { board -> mail.entities.toPopulation(board) },
     evolutionCycleNumber = evolutionCycleLimit
-) {
-
-    init {
-        startEvolution()
-    }
-}
+)

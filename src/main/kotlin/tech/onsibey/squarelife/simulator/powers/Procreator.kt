@@ -21,16 +21,17 @@ class Procreator(private val board: Board, private val population: Population, p
      * Function for processing the procreation. It is called every evolution cycle.
      * @param evolutionCycleNumber evolution cycle number
      */
-    fun processProcreation(evolutionCycleNumber: Int) {
-        val populationSizeProbe = population.size() // current population size
+    fun processProcreation(evolutionCycleNumber: Int): List<Entity> {
         val mates = buildMatesList() // list of mated entities
+        val born = mutableListOf<Entity>() // list of born entities
         mates.forEach {
-            it.procreate() // make mates procreate
+            born.addAll(it.procreate()) // make mates procreate
         }
-        if (population.size() != populationSizeProbe) { // check if someone was born
+        if (born.isNotEmpty()) { // check if someone was born
             updater.updateBoard(evolutionCycleNumber, "someone has been born!")
             println(population) // print updated population
         }
+        return born
     }
 
     /**
@@ -75,7 +76,8 @@ class Procreator(private val board: Board, private val population: Population, p
     /**
      * Extension function for class Mate which lets mates to procreate.
      */
-    private fun Mates.procreate() {
+    private fun Mates.procreate(): List<Entity> {
+        val born = mutableListOf<Entity>()
         val procreationSlots = procreationSlots().toMutableList() // list of positions where entities can procreate
         if (procreationSlots.size >= 2 + 1) {
             // picking new position for the first parent
@@ -96,10 +98,12 @@ class Procreator(private val board: Board, private val population: Population, p
                 is Kuvat -> {
                     val child = Kuvat(childPosition)
                     population.addKuvat(child)
+                    born.add(child)
                 }
                 is Kuvahaku -> {
                     val child = Kuvahaku(childPosition)
                     population.addKuvahaku(child)
+                    born.add(child)
                 }
                 else -> throw IllegalStateException("This entity cannot procreate: ${first::class.simpleName}")
             }
@@ -109,7 +113,7 @@ class Procreator(private val board: Board, private val population: Population, p
             // occupy same tiles and procreation is not limited by available world
             board.update(population.aliveEntitiesPositions()) // update board with current alive entities positions
         }
-
+        return born
     }
 
     /**

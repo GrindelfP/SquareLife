@@ -3,16 +3,18 @@ package tech.onsibey.squarelife.simulator.powers
 import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.simulator.entities.Population
 
-sealed interface Jumala {
+sealed class Jumala(
+    board: Board,
+    populationInitializator: (Board) -> Population,
+    private val evolutionCycleNumber: Int
+) {
 
-    val witness: Witness
-    val mover: Mover
-    val updater: Updater
-    val procreator: Procreator
-    val death: Death
-    val board: Board
-    val population: Population
-    val evolutionCycleNumber: Int
+    private val population: Population = populationInitializator(board)
+    val witness: Witness = Witness()
+    private val updater: Updater = Updater(board, population)
+    private val procreator: Procreator = Procreator(board, population, updater)
+    private val death: Death = Death(population, updater)
+    private val mover: Mover = Mover(population, updater)
 
     /**
      * Function for starting the evolution process.

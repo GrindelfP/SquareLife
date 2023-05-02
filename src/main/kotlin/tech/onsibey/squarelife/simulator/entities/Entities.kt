@@ -6,6 +6,7 @@ import tech.onsibey.squarelife.common.EntitySize.UUTISET_SIZE
 import tech.onsibey.squarelife.visualisation.Color
 import java.util.UUID.randomUUID
 import kotlin.random.Random
+import kotlin.reflect.KClass
 
 /**
  * Sealed class, representing the general data and functionality of the entities.
@@ -137,3 +138,8 @@ data class Mates(val first: Entity, val second: Entity) {
                 "\nsecond: ${second::class.simpleName} - ${second.id} - ${second.position()}"
     }
 }
+
+data class EntityInfo(
+    val entityType: KClass<out Entity>,
+    val coordinates: Set<Coordinate>
+)

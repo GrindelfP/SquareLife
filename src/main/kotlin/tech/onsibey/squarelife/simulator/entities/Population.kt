@@ -1,6 +1,5 @@
 package tech.onsibey.squarelife.simulator.entities
 
-import tech.onsibey.squarelife.common.EntityInfo
 import tech.onsibey.squarelife.common.EntitySize
 import kotlin.random.Random
 

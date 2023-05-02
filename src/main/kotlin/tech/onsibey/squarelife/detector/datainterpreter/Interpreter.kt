@@ -1,6 +1,5 @@
 package tech.onsibey.squarelife.detector.datainterpreter
 
-import tech.onsibey.squarelife.common.EntityInfo
 import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
 import tech.onsibey.squarelife.common.EntitySize.KUVAHAKU_SIZE
 import tech.onsibey.squarelife.common.EntitySize.KUVAT_SIZE
@@ -45,14 +44,18 @@ class Interpreter(private val imageBoard: ImageBoard) {
         if (kuvahakuChecked(x = this.x, y = this.y)) { // case if all entities are possible
             if (kuvatChecked(x = this.x, y = this.y)) {
                 if (uutisetChecked(x = this.x, y = this.y)) {
-                    entities.add(EntityInfo(Uutiset::class, initUutiset(topLeftX = this.x + 1, topLeftY = this.y + 1)))
+                    entities.add(
+                        EntityInfo(Uutiset::class, initUutisetCoordinates(topLeftX = this.x + 1, topLeftY = this.y + 1))
+                    )
                     freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = UUTISET_SIZE)
                 } else {
-                    entities.add(EntityInfo(Kuvat::class, initKuvat(topLeftX = this.x + 1, topLeftY = this.y + 1)))
+                    entities.add(
+                        EntityInfo(Kuvat::class, initKuvatCoordinates(topLeftX = this.x + 1, topLeftY = this.y + 1))
+                    )
                     freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = KUVAT_SIZE)
                 }
             } else {
-                entities.add(EntityInfo(Kuvahaku::class, initKuvahaku(x = this.x + 1, y = this.y + 1)))
+                entities.add(EntityInfo(Kuvahaku::class, initKuvahakuCoordinates(x = this.x + 1, y = this.y + 1)))
                 freeEntitySpace(topLeftX = this.x, topLeftY = this.y, entitySize = KUVAHAKU_SIZE)
             }
         }
@@ -96,7 +99,7 @@ class Interpreter(private val imageBoard: ImageBoard) {
         }
     }
 
-    private fun initUutiset(topLeftX: Int, topLeftY: Int) = setOf(
+    private fun initUutisetCoordinates(topLeftX: Int, topLeftY: Int) = setOf(
         Coordinate(x = topLeftX, y = topLeftY),
         Coordinate(x = topLeftX + 1, y = topLeftY),
         Coordinate(x = topLeftX + 2, y = topLeftY),
@@ -108,11 +111,11 @@ class Interpreter(private val imageBoard: ImageBoard) {
         Coordinate(x = topLeftX + 2, y = topLeftY + 2)
     )
 
-    private fun initKuvahaku(x: Int, y: Int) = setOf(
+    private fun initKuvahakuCoordinates(x: Int, y: Int) = setOf(
         Coordinate(x = x, y = y)
     )
 
-    private fun initKuvat(topLeftX: Int, topLeftY: Int) = setOf(
+    private fun initKuvatCoordinates(topLeftX: Int, topLeftY: Int) = setOf(
         Coordinate(x = topLeftX, y = topLeftY),
         Coordinate(x = topLeftX + 1, y = topLeftY),
         Coordinate(x = topLeftX, y = topLeftY + 1),

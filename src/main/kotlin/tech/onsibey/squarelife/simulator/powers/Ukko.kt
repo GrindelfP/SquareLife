@@ -17,16 +17,11 @@ import tech.onsibey.squarelife.simulator.entities.Population.Companion.toPopulat
  * - death: the death of the entities
  * - mover: the movement of the entities.
  */
-class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) : Jumala {
-
-    override val board = Board(mail.boardSize)
-    override val population: Population = mail.entities.toPopulation(board)
-    override val witness: Witness = Witness()
-    override val updater: Updater = Updater(board, population)
-    override val procreator: Procreator = Procreator(board, population, updater)
-    override val death: Death = Death(population, updater)
-    override val mover: Mover = Mover(population, updater)
-    override val evolutionCycleNumber: Int = evolutionCycleLimit
+class Ukko(mail: Mailman, private val evolutionCycleLimit: Int) : Jumala(
+    board = Board(mail.boardSize),
+    populationInitializator = { board -> mail.entities.toPopulation(board) },
+    evolutionCycleNumber = evolutionCycleLimit
+) {
 
     init {
         startEvolution()

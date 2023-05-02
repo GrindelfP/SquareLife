@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.common.Board
+import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.visualisation.ConsoleBoardVisualizer
 import tech.onsibey.squarelife.simulator.entities.Population
 import tech.onsibey.squarelife.visualisation.Visualizer

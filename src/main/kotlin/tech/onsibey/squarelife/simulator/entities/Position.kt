@@ -1,4 +1,4 @@
-package tech.onsibey.squarelife.common
+package tech.onsibey.squarelife.simulator.entities
 
 import tech.onsibey.squarelife.visualisation.Color
 

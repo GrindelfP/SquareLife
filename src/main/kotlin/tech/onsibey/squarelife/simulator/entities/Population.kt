@@ -1,10 +1,7 @@
 package tech.onsibey.squarelife.simulator.entities
 
+import tech.onsibey.squarelife.common.EntityInfo
 import tech.onsibey.squarelife.common.EntitySize
-import tech.onsibey.squarelife.common.Board
-import tech.onsibey.squarelife.common.Coordinate
-import tech.onsibey.squarelife.common.EntityPosition
-import tech.onsibey.squarelife.common.Position
 import kotlin.random.Random
 
 /**
@@ -96,32 +93,16 @@ data class Population(
      * Companion object containing static functions for generating population and initializing entities.
      */
     companion object {
-        fun generatePopulation(entities: List<Entity>): Population {
-            var uutiset: Uutiset? = null
-            val kuvahakus = mutableListOf<Kuvahaku>()
-            val kuvats = mutableListOf<Kuvat>()
-            entities.forEach { entity ->
-                when (entity) {
-                    is Uutiset -> uutiset = entity
-                    is Kuvahaku -> kuvahakus.add(entity)
-                    is Kuvat -> kuvats.add(entity)
-                }
-            }
 
-            val validatedUutiset = requireNotNull(uutiset) { "Uutiset is not found" }
-
-            return Population(validatedUutiset, kuvahakus, kuvats)
-        }
-
-        fun List<Entity>.toPopulation(): Population {
+        fun List<EntityInfo>.toPopulation(board: Board): Population {
             var uutiset: Uutiset? = null
             val kuvahakus = mutableListOf<Kuvahaku>()
             val kuvats = mutableListOf<Kuvat>()
             this.forEach { entity ->
-                when (entity) {
-                    is Uutiset -> uutiset = entity
-                    is Kuvahaku -> kuvahakus.add(entity)
-                    is Kuvat -> kuvats.add(entity)
+                when (entity.entityType) {
+                    Uutiset::class -> uutiset = Uutiset(Position(entity.coordinates, board))
+                    Kuvahaku::class -> kuvahakus.add(Kuvahaku(Position(entity.coordinates, board)))
+                    Kuvat::class -> kuvats.add(Kuvat(Position(entity.coordinates, board)))
                 }
             }
 
@@ -129,6 +110,7 @@ data class Population(
 
             return Population(validatedUutiset, kuvahakus, kuvats)
         }
+
 
         /**
          * Function generates a population of entities.

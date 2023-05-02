@@ -3,11 +3,11 @@ package tech.onsibey.squarelife.detector.datainterpreter
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import tech.onsibey.squarelife.TestData
-import tech.onsibey.squarelife.common.Coordinate
-import tech.onsibey.squarelife.common.Position
+import tech.onsibey.squarelife.simulator.entities.Coordinate
+import tech.onsibey.squarelife.simulator.entities.Position
 import tech.onsibey.squarelife.simulator.entities.Kuvahaku
 import tech.onsibey.squarelife.simulator.entities.Kuvat
-import tech.onsibey.squarelife.common.Board
+import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.simulator.entities.Uutiset
 import kotlin.test.assertEquals
 
@@ -39,16 +39,29 @@ class InterpreterTest {
     private val testEntityList = listOf(
         Kuvahaku(Position(setOf(Coordinate(1, 1)), Board(TEST_IMAGE_BOARD_SIZE))),
         Kuvahaku(Position(setOf(Coordinate(3, 1)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvat(Position(setOf(Coordinate(9, 1), Coordinate(9, 2),
-            Coordinate(10, 1), Coordinate(10, 2)), Board(TEST_IMAGE_BOARD_SIZE)
-        )),
-        Kuvat(Position(setOf(Coordinate(2, 3), Coordinate(3, 3),
-            Coordinate(2, 4), Coordinate(3, 4)), Board(TEST_IMAGE_BOARD_SIZE)
-        )),
+        Kuvat(
+            Position(setOf(
+                Coordinate(9, 1), Coordinate(9, 2),
+            Coordinate(10, 1), Coordinate(10, 2)
+            ), Board(TEST_IMAGE_BOARD_SIZE)
+        )
+        ),
+        Kuvat(
+            Position(setOf(
+                Coordinate(2, 3), Coordinate(3, 3),
+            Coordinate(2, 4), Coordinate(3, 4)
+            ), Board(TEST_IMAGE_BOARD_SIZE)
+        )
+        ),
         Kuvahaku(Position(setOf(Coordinate(5, 4)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Uutiset(Position(setOf(Coordinate(7, 5), Coordinate(8, 5), Coordinate(9, 5),
+        Uutiset(
+            Position(setOf(
+                Coordinate(7, 5), Coordinate(8, 5), Coordinate(9, 5),
             Coordinate(7, 6), Coordinate(8, 6), Coordinate(9, 6),
-            Coordinate(7, 7), Coordinate(8, 7), Coordinate(9, 7)), Board(TEST_IMAGE_BOARD_SIZE))),
+            Coordinate(7, 7), Coordinate(8, 7), Coordinate(9, 7)
+            ), Board(TEST_IMAGE_BOARD_SIZE)
+        )
+        ),
         Kuvahaku(Position(setOf(Coordinate(1, 6)), Board(TEST_IMAGE_BOARD_SIZE))),
         Kuvahaku(Position(setOf(Coordinate(1, 7)), Board(TEST_IMAGE_BOARD_SIZE))),
         Kuvahaku(Position(setOf(Coordinate(1, 8)), Board(TEST_IMAGE_BOARD_SIZE))),
@@ -88,7 +101,7 @@ class InterpreterTest {
         //assert(mailMan.boardSize == 6)
         /*assertEquals(expected = testImageBoardSize, actual = mailMan.boardSize, message = "Expected board size is $testImageBoardSize, " +
                 "actual is ${mailMan.boardSize}")*/
-        assertThat(TEST_IMAGE_BOARD_SIZE).isEqualTo(mailMan.board.boardSize.numberOfRows)
+        assertThat(TEST_IMAGE_BOARD_SIZE).isEqualTo(mailMan.boardSize.numberOfRows)
         // assertThatThrownBy {  }.isInstanceOf(IllegalStateException::class.java).hasMessageContaining("")
     }
 
@@ -97,7 +110,7 @@ class InterpreterTest {
         val mailMan = Interpreter(testImageBoard).prepareMailman()
 
         assertEquals(expected = TEST_IMAGE_BOARD_POPULATION_COUNT,
-            actual = mailMan.population.size(),
+            actual = mailMan.entities.size,
             message = "The population should be $TEST_IMAGE_BOARD_POPULATION_COUNT, bu actually is $mailMan.entities.size")
     }
 
@@ -105,8 +118,8 @@ class InterpreterTest {
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct type of entities`() {
         val mailMan = Interpreter(testImageBoard).prepareMailman()
 
-        mailMan.population.aliveEntities().forEachIndexed { index, entity ->
-            assertThat(entity::class.simpleName).isEqualTo(testEntityNames[index])
+        mailMan.entities.forEachIndexed { index, entity ->
+            assertThat(entity.entityType.simpleName).isEqualTo(testEntityNames[index])
         }
     }
 
@@ -114,8 +127,9 @@ class InterpreterTest {
     fun `GIVEN valid ImageBoard WHEN called sendMailman() THEN returns correct coordinates of entities`() {
         val mailMan = Interpreter(testImageBoard).prepareMailman()
 
-        mailMan.population.aliveEntities().forEachIndexed { index, entity ->
-            assertThat(entity).isEqualTo(testEntityList[index])
+        mailMan.entities.forEachIndexed { index, entity ->
+            assertThat(entity.entityType).isEqualTo(testEntityList[index]::class)
+            assertThat(entity.coordinates).isEqualTo(testEntityList[index].position().coordinates)
         }
     }
 }

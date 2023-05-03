@@ -8,7 +8,7 @@ import tech.onsibey.squarelife.usercommunication.Communicator.askNumberOfCycles
 import tech.onsibey.squarelife.usercommunication.Communicator.greetUser
 import tech.onsibey.squarelife.usercommunication.Communicator.initializationFromPhoto
 import tech.onsibey.squarelife.usercommunication.Communicator.negotiatePhoto
-import tech.onsibey.squarelife.visualisation.ConsoleEvolutionCycleVisualizer
+import tech.onsibey.squarelife.visualisation.GifEvolutionCycleVisualizer
 
 object Program {
     @JvmStatic
@@ -25,6 +25,6 @@ object Program {
             else -> IkuTurso
         }
 
-        ConsoleEvolutionCycleVisualizer(god.evolutionResult).visualize()
+        GifEvolutionCycleVisualizer(god.evolutionResult).visualize()
     }
 }

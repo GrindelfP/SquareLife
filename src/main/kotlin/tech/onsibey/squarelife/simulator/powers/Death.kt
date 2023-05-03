@@ -1,10 +1,6 @@
 package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.simulator.entities.Population
-import tech.onsibey.squarelife.simulator.entities.Entity
-import tech.onsibey.squarelife.simulator.entities.Kuvahaku
-import tech.onsibey.squarelife.simulator.entities.Kuvat
-import tech.onsibey.squarelife.simulator.entities.Uutiset
+import tech.onsibey.squarelife.simulator.entities.*
 
 /**
  * This class is responsible for the death of entities. It contains properties:
@@ -35,8 +31,10 @@ class Death(private val population: Population, private val updater: Updater) {
             swallowed.addAll(processSwallowing(entity))
         }
         if (swallowed.isNotEmpty()) {
-            updater.updateBoard(evolutionCycleNumber, "someone didn't survive!")
-            println(population)
+            updater.updateBoard(
+                evolutionCycleNumber,
+                listOf("swallowed entities: ${swallowed.joinToString(", ")}}", population.toString())
+            )
         }
         return swallowed
     }

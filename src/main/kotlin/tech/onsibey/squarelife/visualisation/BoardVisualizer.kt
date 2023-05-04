@@ -100,16 +100,16 @@ class GifEvolutionCycleVisualizer(private val evolutionResultReport: EvolutionRe
             // there is extensive information about the evolution cycle in the report
             // (evolutionCycle, population size etc.) but we use only the snapshots for now.
             // This info can be added as a footer to the gif.
-            if (evolutionCycle.number == 0) createImg(evolutionCycle.populationSnapshots.initial)
-            createImg(evolutionCycle.populationSnapshots.afterMovement)
-            createImg(evolutionCycle.populationSnapshots.afterSwallowing)
-            createImg(evolutionCycle.populationSnapshots.afterProcreation)
+            if (evolutionCycle.number == 0) generateImgFile(evolutionCycle.populationSnapshots.initial)
+            generateImgFile(evolutionCycle.populationSnapshots.afterMovement)
+            generateImgFile(evolutionCycle.populationSnapshots.afterSwallowing)
+            generateImgFile(evolutionCycle.populationSnapshots.afterProcreation)
         }
 
         generateGif()
     }
 
-    private fun createImg(populationSnapshot: PopulationSnapshot) {
+    private fun generateImgFile(populationSnapshot: PopulationSnapshot) {
         val bufferedImage = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
         val graphics = bufferedImage.createGraphics()
         graphics.color = Color.WHITE

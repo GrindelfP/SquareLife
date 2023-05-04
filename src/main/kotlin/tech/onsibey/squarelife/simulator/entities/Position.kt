@@ -1,6 +1,6 @@
 package tech.onsibey.squarelife.simulator.entities
 
-import tech.onsibey.squarelife.visualisation.Color
+import kotlin.reflect.KClass
 
 /**
  * Class, representing position on the board in integer coordinates - x and y.
@@ -15,6 +15,8 @@ data class Coordinate(val x: Int, val y: Int)
  * @param board board on which the entity is placed.
  */
 data class Position(val coordinates: Set<Coordinate>, private val board: Board) {
+
+    fun contains(coordinate: Coordinate): Boolean = coordinates.contains(coordinate)
 
     /**
      * Function to detect possible move coordinates.
@@ -100,6 +102,6 @@ data class Position(val coordinates: Set<Coordinate>, private val board: Board) 
 /**
  * Class, representing entity position on the board, as well as its color.
  * @param position position of the entity.
- * @param color color of the entity.
+ * @param type type of the entity.
  */
-data class EntityPosition(val position: Position, val color: Color)
+data class EntityPosition(val position: Position, val type: KClass<out Entity>)

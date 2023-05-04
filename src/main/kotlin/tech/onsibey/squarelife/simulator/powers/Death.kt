@@ -1,10 +1,6 @@
 package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.simulator.entities.Population
-import tech.onsibey.squarelife.simulator.entities.Entity
-import tech.onsibey.squarelife.simulator.entities.Kuvahaku
-import tech.onsibey.squarelife.simulator.entities.Kuvat
-import tech.onsibey.squarelife.simulator.entities.Uutiset
+import tech.onsibey.squarelife.simulator.entities.*
 
 /**
  * This class is responsible for the death of entities. It contains properties:
@@ -29,49 +25,68 @@ class Death(private val population: Population, private val updater: Updater) {
      * Function for the death of entities by swallowing by another entities.
      * Encapsulates the private processSwallowing function.
      */
-    fun processSwallowing(evolutionCycleNumber: Int) {
-        val populationSizeProbe = population.size()
+    fun processSwallowing(evolutionCycleNumber: Int): List<Entity> {
+        val swallowed = mutableListOf<Entity>()
         population.aliveEntities().forEach { entity ->
-            processSwallowing(entity)
+            swallowed.addAll(processSwallowing(entity))
         }
-        if (population.size() != populationSizeProbe) {
-            updater.updateBoard(evolutionCycleNumber, "someone didn't survive!")
-            println(population)
+        if (swallowed.isNotEmpty()) {
+            updater.updateBoard(
+                evolutionCycleNumber,
+                listOf("swallowed entities: ${swallowed.joinToString(", ")}}", population.toString())
+            )
         }
+        return swallowed
     }
 
     /**
      * Private function for the death of entities by swallowing by another entities.
      */
-    private fun processSwallowing(entity: Entity) {
+    private fun processSwallowing(entity: Entity): List<Entity> {
         // Guardian: we do not check swallowing if the entity is not alive (this value can be changed after we built the list of alive entities)
-        if (!entity.alive) return
+        if (!entity.alive) return emptyList()
 
         val overlappingAliens = population.aliveEntities().filter { entity overlapsWithAlien it }
         val commonCoordinates = entity.commonCoordinates(overlappingAliens)
+        val swallowed = mutableListOf<Entity>()
 
         when (entity) {
             is Uutiset -> when {
-                commonCoordinates.size >= UUTISET_TERMINAL_NUMBER_OF_OCCUPIED_TILES -> entity.alive = false
+                commonCoordinates.size >= UUTISET_TERMINAL_NUMBER_OF_OCCUPIED_TILES -> {
+                    entity.alive = false
+                    swallowed.add(entity)
+                }
                 else -> overlappingAliens.forEach { overlappingEntity ->
                     when {
-                        overlappingEntity is Kuvahaku -> overlappingEntity.alive = false
-                        // Uutiset overlaps with Kuvat, and they occupy 2 or more common coordinates
-                        overlappingEntity is Kuvat && entity.commonCoordinates(overlappingEntity).size >= 2 ->
+                        overlappingEntity is Kuvahaku -> {
                             overlappingEntity.alive = false
+                            swallowed.add(overlappingEntity)
+                        }
+                        // Uutiset overlaps with Kuvat, and they occupy 2 or more common coordinates
+                        overlappingEntity is Kuvat && entity.commonCoordinates(overlappingEntity).size >= 2 -> {
+                            overlappingEntity.alive = false
+                            swallowed.add(overlappingEntity)
+                        }
                     }
                 }
             }
             is Kuvat -> when {
-                commonCoordinates.size >= KUVAT_TERMINAL_NUMBER_OF_OCCUPIED_TILES -> entity.alive = false
+                commonCoordinates.size >= KUVAT_TERMINAL_NUMBER_OF_OCCUPIED_TILES -> {
+                    entity.alive = false
+                    swallowed.add(entity)
+                }
                 // if kuvat survived then kuvahakus (in fact the one overlapping kuvahaku) are swallowed.
                 // But we should filter out Uutiset (if it survived)
-                else -> overlappingAliens.filter { it !is Uutiset }.forEach { it.alive = false }
+                else -> overlappingAliens.filter { it !is Uutiset }.forEach {
+                    it.alive = false
+                    swallowed.add(it)
+                }
             }
             is Kuvahaku -> {
             /*NOP: if Kuvahaku is still alive then there is nothing to check here: Kuvahaku is a real survivor!*/
             }
         }
+        return swallowed
     }
 
     /**

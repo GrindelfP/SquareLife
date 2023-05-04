@@ -8,18 +8,23 @@ import tech.onsibey.squarelife.usercommunication.Communicator.askNumberOfCycles
 import tech.onsibey.squarelife.usercommunication.Communicator.greetUser
 import tech.onsibey.squarelife.usercommunication.Communicator.initializationFromPhoto
 import tech.onsibey.squarelife.usercommunication.Communicator.negotiatePhoto
+import tech.onsibey.squarelife.visualisation.GifEvolutionCycleVisualizer
 
 object Program {
     @JvmStatic
     fun main(args: Array<String>) {
         greetUser()
 
-        if (initializationFromPhoto()) {
-            val imageBoard = Processor(negotiatePhoto()).processImageBoard()
-            val mail = Interpreter(imageBoard).prepareMailman()
+        val god = when {
+            initializationFromPhoto() -> {
+                val imageBoard = Processor(negotiatePhoto()).processImageBoard()
+                val mail = Interpreter(imageBoard).prepareMailman()
 
-            Ukko(mail, askNumberOfCycles())
+                Ukko(mail, askNumberOfCycles())
+            }
+            else -> IkuTurso
         }
-        else IkuTurso
+
+        GifEvolutionCycleVisualizer(god.evolutionResult).visualize()
     }
 }

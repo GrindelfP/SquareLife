@@ -14,7 +14,7 @@ import kotlin.random.Random
  * @param kuvats list of all Kuvats entity
  */
 data class Population(
-    val uutiset: Uutiset,
+    private val uutiset: Uutiset,
     private val kuvahakus: List<Kuvahaku>,
     private val kuvats: List<Kuvat>,
 ) {
@@ -40,7 +40,7 @@ data class Population(
     /**
      * Function returns a list of all alive entities.
      */
-    fun aliveEntities() = mutableListOf<Entity>(uutiset).apply {
+    fun aliveEntities(): List<Entity> = mutableListOf<Entity>(uutiset).apply {
         addAll(kuvahakuPopulation)
         addAll(kuvatPopulation)
     }.filter { it.alive }
@@ -52,12 +52,12 @@ data class Population(
      */
     fun aliveEntitiesPositions(): List<EntityPosition> {
         val positions = mutableListOf<EntityPosition>()
-        if (uutiset.alive) positions.add(EntityPosition(uutiset.position(), uutiset.color))
+        if (uutiset.alive) positions.add(EntityPosition(uutiset.position(), Uutiset::class))
         kuvatPopulation.forEach { kuvat ->
-            if (kuvat.alive) positions.add(EntityPosition(kuvat.position(), kuvat.color))
+            if (kuvat.alive) positions.add(EntityPosition(kuvat.position(), Kuvat::class))
         }
         kuvahakuPopulation.forEach { kuvahaku ->
-            if (kuvahaku.alive) positions.add(EntityPosition(kuvahaku.position(), kuvahaku.color))
+            if (kuvahaku.alive) positions.add(EntityPosition(kuvahaku.position(), Kuvahaku::class))
         }
 
         return positions

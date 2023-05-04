@@ -20,3 +20,10 @@ and the size of the board.
 ### C)
 1. DEFINE how entities are placed on the board in current version.
 2. DEFINE is it needed to implement new functions for placing e. on board, or it is enough to modify existing function.
+
+### D)
+1. Add footer to gif, it can contain info about the population state and evolution cycle.
+2. 
+
+### E)
+1. Split visual and logical parts of BOARD class.

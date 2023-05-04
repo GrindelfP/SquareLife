@@ -34,15 +34,7 @@ object IkuTurso : Jumala(
         generatePopulation(STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION, STANDARD_NUMBER_OF_KUVAT_IN_POPULATION, board)
     },
     evolutionCycleNumber = DEFAULT_EVOLUTION_CYCLES_LIMIT
-) {
-
-    /**
-     * Initializer of the game process.
-     */
-    init {
-        startEvolution()
-    }
-}
+)
 
 private object IkuTursoConstants {
     const val STANDARD_BOARD_HORIZONTAL_SIDE_SIZE = 40

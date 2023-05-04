@@ -16,6 +16,6 @@ class Mover(private val population: Population, private val updater: Updater) {
         population.aliveEntities().forEach { entity ->
             entity.move()
         }
-        updater.updateBoard(evolutionCycleNumber)
+        updater.updateBoard(evolutionCycleNumber, listOf("entities were moved", population.toString()))
     }
 }

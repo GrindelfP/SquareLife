@@ -124,7 +124,14 @@ data class Board(val boardSize: BoardSize) {
                     // TODO: check why only Kuvahakus overlap with indication by magenta color
                 } else {
                     // tile is painted in the color of this entity
-                    boardState[coordinate.y][coordinate.x] = Tile(entityPosition.color).toString()
+                    boardState[coordinate.y][coordinate.x] = Tile(
+                        when(entityPosition.type) {
+                            Kuvahaku::class -> Color.BLUE
+                            Uutiset::class -> Color.RED
+                            Kuvat::class -> Color.GREEN
+                            else -> TODO()
+                        }
+                    ).toString()
                 }
             }
         }

@@ -3,7 +3,7 @@ package tech.onsibey.squarelife.simulator.powers
 import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.simulator.entities.BoardSize
 import tech.onsibey.squarelife.simulator.entities.Population
-import tech.onsibey.squarelife.visualisation.ConsoleBoardVisualizer
+import tech.onsibey.squarelife.visualisation.NoopBoardVisualizer
 import tech.onsibey.squarelife.visualisation.Visualizer
 
 sealed class Jumala(
@@ -18,8 +18,8 @@ sealed class Jumala(
     private val death: Death = Death(population, board)
     private val mover: Mover = Mover(population, board)
 
-    //private val visualizer: Visualizer = NoopBoardVisualizer()
-    private val visualizer: Visualizer = ConsoleBoardVisualizer()
+    private val visualizer: Visualizer = NoopBoardVisualizer()
+    //private val visualizer: Visualizer = ConsoleBoardVisualizer()
 
     val evolutionResult: EvolutionResultReport = EvolutionResultReport(board.boardSize, performEvolution())
 
@@ -32,7 +32,7 @@ sealed class Jumala(
         visualizer.visualize(
             EvolutionCycleReport(
                 board.boardSize, EvolutionCycle(
-                    number = evolutionCycleNumber, born = emptyList(),
+                    number = -1, born = emptyList(),
                     swallowed = emptyList(), populationSnapshots = PopulationSnapshots(
                         initial = populationSnapshot(PopulationSnapshotType.INITIAL),
                         afterMovement = populationSnapshot(PopulationSnapshotType.AFTER_MOVEMENT),
@@ -74,16 +74,6 @@ sealed class Jumala(
                 afterSwallowing = afterSwallowingPopulationSnapshot
             )
         )
-
-        /*val evolutionCycle = EvolutionCycle(
-            number = evolutionCycleNumber, born = emptyList(),
-            swallowed = swallowed, populationSnapshots = PopulationSnapshots(
-                initial = initialPopulationSnapshot,
-                afterMovement = afterMovementPopulationSnapshot,
-                afterProcreation = populationSnapshot(PopulationSnapshotType.AFTER_PROCREATION),
-                afterSwallowing = afterSwallowingPopulationSnapshot
-            )
-        )*/
 
         witness.addEvolutionCycle(evolutionCycle)
 

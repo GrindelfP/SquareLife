@@ -39,31 +39,39 @@ class ConsoleBoardVisualizer : Visualizer {
      * Overrides the visualize method from Visualizer interface.
      * It prints the message and the board.
      */
-    override fun visualize(evolutionCycleReport: EvolutionCycleReport) {
-        // general message is a string indicating the current evolution cycle (-1 - not started yet,
-        // 0 - the first evolution cycle etc.)
-        val generalMessage = when (evolutionCycleReport.evolutionCycle.number) {
-            -1 -> "Evolution haven't started yet!"
-            else -> "Evolution cycle #${evolutionCycleReport.evolutionCycle.number + 1}"
-        }
+    override fun visualize(evolutionCycleReport: EvolutionCycleReport) = BoardView(evolutionCycleReport.boardSize).run {
+        when (evolutionCycleReport.evolutionCycle.number) {
+            -1 -> {
+                println("Evolution haven't started yet!")
+                update(evolutionCycleReport.evolutionCycle.populationSnapshots.initial.aliveEntities)
+                print(toString())
+            }
 
-        println(generalMessage)
+            else -> {
+                println("Evolution cycle #${evolutionCycleReport.evolutionCycle.number + 1}")
 
-        BoardView(evolutionCycleReport.boardSize).run {
-            update(evolutionCycleReport.evolutionCycle.populationSnapshots.initial.aliveEntities)
-            print(toString())
-        }
-        BoardView(evolutionCycleReport.boardSize).run {
-            update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterMovement.aliveEntities)
-            print(toString())
-        }
-        BoardView(evolutionCycleReport.boardSize).run {
-            update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterSwallowing.aliveEntities)
-            print(toString())
-        }
-        BoardView(evolutionCycleReport.boardSize).run {
-            update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterProcreation.aliveEntities)
-            print(toString())
+                println("After movement:")
+                update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterMovement.aliveEntities)
+                print(toString())
+
+                if (evolutionCycleReport.evolutionCycle.swallowed.isNotEmpty()) {
+                    val swallowedEntities = evolutionCycleReport.evolutionCycle.swallowed.map {
+                        it::class.simpleName
+                    }.joinToString(", ")
+                    println("Swallowing completed. Swallowed entities: $swallowedEntities")
+                    update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterSwallowing.aliveEntities)
+                    print(toString())
+                }
+
+                if (evolutionCycleReport.evolutionCycle.born.isNotEmpty()) {
+                    val bornEntities = evolutionCycleReport.evolutionCycle.born.map {
+                        it::class.simpleName
+                    }.joinToString(", ")
+                    println("Procreation completed. Born entities: $bornEntities")
+                    update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterProcreation.aliveEntities)
+                    print(toString())
+                }
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 package tech.onsibey.squarelife.visualisation
 
-import tech.onsibey.squarelife.common.EntitySize.MIN_ENTITY_AREA_SIDE_SIZE
 import tech.onsibey.squarelife.simulator.entities.*
 import tech.onsibey.squarelife.visualisation.Constants.GAP
 
@@ -27,22 +26,6 @@ data class BoardView(val boardSize: BoardSize) {
     private val boardState = initBoard()
 
     /**
-     * Initializer of a board. Requires that:
-     * - number of rows should be divisible by the minimum size of the entity area
-     * - row length should be divisible by the minimum size of the entity area.
-     *
-     * If not so, throws an instance of IllegalArgumentException.
-     */
-    init {
-        require(boardSize.numberOfRows % MIN_ENTITY_AREA_SIDE_SIZE == 0) {
-            "Number of rows must be a multiple of the minimum size of the entity area of $MIN_ENTITY_AREA_SIDE_SIZE "
-        }
-        require(boardSize.rowLength % MIN_ENTITY_AREA_SIDE_SIZE == 0) {
-            "Row length must be a multiple of the minimum size of the entity area of $MIN_ENTITY_AREA_SIDE_SIZE "
-        }
-    }
-
-    /**
      * Function initializing the coordinates of the board.
      */
     private fun initCoordinates(): MutableList<Coordinate> {
@@ -55,11 +38,6 @@ data class BoardView(val boardSize: BoardSize) {
 
         return coordinates
     }
-
-    /**
-     * Constructor for creation of square boards.
-     */
-    constructor(size: Int) : this(BoardSize(size, size))
 
     /**
      * Function initializing the board with borders as a 2-dimensional list of String.

@@ -96,19 +96,6 @@ data class Board(val boardSize: BoardSize) {
             }
         }
     }
-
-    /**
-     * Function which overrides toString() function and returns the whole board as a string.
-     */
-    override fun toString(): String = with(StringBuffer()) {
-        boardState.forEach { row ->
-            row.forEach { element ->
-                this.append(element)
-            }
-            append("\n")
-        }
-        toString()
-    }
 }
 
 /**

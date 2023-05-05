@@ -1,6 +1,7 @@
 package tech.onsibey.squarelife.visualisation
 
 import tech.onsibey.squarelife.simulator.entities.*
+import tech.onsibey.squarelife.simulator.powers.EvolutionCycleReport
 import tech.onsibey.squarelife.simulator.powers.EvolutionResultReport
 import tech.onsibey.squarelife.simulator.powers.PopulationSnapshot
 import tech.onsibey.squarelife.visualisation.utils.GifSequenceWriter
@@ -22,51 +23,58 @@ import javax.imageio.stream.ImageOutputStream
 interface Visualizer {
     /**
      * Visualizes the board.
-     * @param evolutionCycleNumber the number of the current evolution cycle.
+     * @param evolutionCycleReport the number of the current evolution cycle.
      * @param extraDescription an extra description of the visualization, if needed
      * (e.g. if some entity died or was born during the evolution cycle).
      */
-    fun visualize(evolutionCycleNumber: Int, extraDescription: List<String>? = null)
+    fun visualize(evolutionCycleReport: EvolutionCycleReport)
 }
-
-/**
- * Abstract class for all kinds of visualisation of the board. Inherits from Visualizer interface.
- */
-abstract class BoardVisualizer(private val board: Board) : Visualizer
 
 /**
  * Visualizes the board in console.
  */
-class ConsoleBoardVisualizer(private val board: Board) : BoardVisualizer(board) {
+class ConsoleBoardVisualizer : Visualizer {
 
     /**
      * Overrides the visualize method from Visualizer interface.
      * It prints the message and the board.
      */
-    override fun visualize(evolutionCycleNumber: Int, extraDescription: List<String>?) {
+    override fun visualize(evolutionCycleReport: EvolutionCycleReport) {
         // general message is a string indicating the current evolution cycle (-1 - not started yet,
         // 0 - the first evolution cycle etc.)
-        val generalMessage = when (evolutionCycleNumber) {
+        val generalMessage = when (evolutionCycleReport.evolutionCycle.number) {
             -1 -> "Evolution haven't started yet!"
-            else -> "Evolution cycle #${evolutionCycleNumber + 1}"
+            else -> "Evolution cycle #${evolutionCycleReport.evolutionCycle.number + 1}"
         }
-        // message is the whole message to be printed,  including the general message, the board and the
-        // extra description, if needed (it required if some entity died or was born during the evolution cycle)
-        val message =
-            "${generalMessage}${if (extraDescription != null) ", \n${extraDescription.joinToString("\n")}" else ""}"
 
-        println(message)
-        print(board.toString())
+        println(generalMessage)
+
+        BoardView(evolutionCycleReport.boardSize).run {
+            update(evolutionCycleReport.evolutionCycle.populationSnapshots.initial.aliveEntities)
+            print(toString())
+        }
+        BoardView(evolutionCycleReport.boardSize).run {
+            update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterMovement.aliveEntities)
+            print(toString())
+        }
+        BoardView(evolutionCycleReport.boardSize).run {
+            update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterSwallowing.aliveEntities)
+            print(toString())
+        }
+        BoardView(evolutionCycleReport.boardSize).run {
+            update(evolutionCycleReport.evolutionCycle.populationSnapshots.afterProcreation.aliveEntities)
+            print(toString())
+        }
     }
 }
 
-class NoopBoardVisualizer(board: Board) : BoardVisualizer(board) {
-    override fun visualize(evolutionCycleNumber: Int, extraDescription: List<String>?) {
+class NoopBoardVisualizer : Visualizer {
+    override fun visualize(evolutionCycleReport: EvolutionCycleReport) {
         // do nothing
     }
 }
 
-class GifEvolutionCycleVisualizer(private val evolutionResultReport: EvolutionResultReport) {
+class GifEvolutionCycleGenerator(private val evolutionResultReport: EvolutionResultReport) {
 
     companion object {
         private const val TILE_SIZE = 10
@@ -127,7 +135,7 @@ class GifEvolutionCycleVisualizer(private val evolutionResultReport: EvolutionRe
         (0 until evolutionResultReport.boardSize.numberOfRows).forEach { y ->
             (0 until evolutionResultReport.boardSize.rowLength).forEach { x ->
                 // we are using a hack here: entities are drawn with a shift of 1 pixel to the right and to the bottom
-                when (val entity = entities.find { it.position.contains(Coordinate(x + 1, y + 1)) }) {
+                when (val entity = entities.find { it.position.contains(Coordinate(x/* + 1*/, y/* + 1*/)) }) {
                     null -> {
                         color = GREY
                         fillRect(x * TILE_SIZE + 1, y * TILE_SIZE + 1, TILE_FILL_SIZE, TILE_FILL_SIZE)

@@ -76,7 +76,7 @@ data class Position(val coordinates: Set<Coordinate>, private val board: Board) 
      */
     private fun shiftToEmptyPosition(horizontal: Int, vertical: Int): Position? {
         val newCoordinates = shiftCoordinates(horizontal, vertical).filter {
-            board.tileIsEmpty(it) || coordinates.contains(it)
+            !board.tileIsOccupied(it) || coordinates.contains(it)
         }.toSet() // filter out coordinates that are not empty or already occupied
         return when {
             newCoordinates.size != coordinates.size -> null

@@ -6,21 +6,19 @@ import tech.onsibey.squarelife.simulator.entities.*
  * Class responsible for procreation of entities. It has the following properties passed as parameters:
  * @param board board on which entities are located
  * @param population current population of entities
- * @param updater updater of board instance
  */
-class Procreator(private val board: Board, private val population: Population, private val updater: Updater) {
+class Procreator(private val board: Board, private val population: Population) {
     /**
      * Function for processing the procreation. It is called every evolution cycle.
-     * @param evolutionCycleNumber evolution cycle number
      */
-    fun processProcreation(evolutionCycleNumber: Int): List<Entity> {
+    fun processProcreation(): List<Entity> {
         val mates = buildMatesList() // list of mated entities
         val born = mutableListOf<Entity>() // list of born entities
         mates.forEach {
             born.addAll(it.procreate()) // make mates procreate
         }
         if (born.isNotEmpty()) { // check if someone was born
-            updater.updateBoard(evolutionCycleNumber, listOf("born entities: ${born.joinToString(", ")}", population.toString()))
+            board.update(population.aliveEntitiesPositions()) // update board
         }
         return born
     }
@@ -122,19 +120,19 @@ class Procreator(private val board: Board, private val population: Population, p
         // defining the area coordinates where entities can procreate
         var leftX = centerOfProcreation.x
         repeat(first.size * 2) {
-            if (leftX - 1 != 0) leftX--
+            if (leftX - 1 >= 0) leftX--
         }
         var rightX = centerOfProcreation.x + first.size
         repeat(first.size * 2) {
-            if (rightX + 1 <= board.boardSize.rowLength) rightX++
+            if (rightX + 1 < board.boardSize.rowLength) rightX++
         }
         var upY = centerOfProcreation.y
         repeat(first.size * 2) {
-            if (upY - 1 != 0) upY--
+            if (upY - 1 >= 0) upY--
         }
         var downY = centerOfProcreation.y + first.size
         repeat(first.size * 2) {
-            if (downY + 1 <= board.boardSize.numberOfRows) downY++
+            if (downY + 1 < board.boardSize.numberOfRows) downY++
         }
 
         // creating list of coordinates where entities can procreate
@@ -158,15 +156,15 @@ class Procreator(private val board: Board, private val population: Population, p
         }
 
         // filtering out positions
-        val validSlots =
-            procreationSlots.filter {
-                position -> position.coordinates.all { it.x in (leftX..rightX) && it.y in (upY..downY) }
+        val validSlots = procreationSlots.filter { position ->
+                position.coordinates.all { it.x in (leftX..rightX) && it.y in (upY..downY) }
             }
 
         return validSlots.filter { position ->
             position == first.position() ||
                     position == second.position() ||
-                    position.coordinates.all { board.tileIsEmpty(it)
+                    position.coordinates.all {
+                        board.onBoard(it) && !board.tileIsOccupied(it)
                     }
         }
     }

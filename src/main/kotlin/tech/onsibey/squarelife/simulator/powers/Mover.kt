@@ -1,5 +1,6 @@
 package tech.onsibey.squarelife.simulator.powers
 
+import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.simulator.entities.Population
 
 /**
@@ -7,15 +8,15 @@ import tech.onsibey.squarelife.simulator.entities.Population
  * - population: the population to move
  * - updater: the board updater to update the board after moving
  */
-class Mover(private val population: Population, private val updater: Updater) {
+class Mover(private val population: Population, private val board: Board) {
 
     /**
      * Function for moving entities. It moves all alive entities and updates the board.
      */
-    fun move(evolutionCycleNumber: Int) {
+    fun move() {
         population.aliveEntities().forEach { entity ->
             entity.move()
         }
-        updater.updateBoard(evolutionCycleNumber, listOf("entities were moved", population.toString()))
+        board.update(population.aliveEntitiesPositions())
     }
 }

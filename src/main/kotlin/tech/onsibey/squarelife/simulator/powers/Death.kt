@@ -11,7 +11,7 @@ import tech.onsibey.squarelife.simulator.entities.*
  * - UUTISET_TERMINAL_NUMBER_OF_OCCUPIED_TILES: the number of occupied tiles for the Uutiset entity
  * - KUVAT_TERMINAL_NUMBER_OF_OCCUPIED_TILES: the number of occupied tiles for the Kuvat entity
  */
-class Death(private val population: Population, private val updater: Updater) {
+class Death(private val population: Population, private val board: Board) {
 
     /**
      * Companion object contains constants for the number of occupied tiles for the Uutiset and Kuvat entities.
@@ -25,16 +25,17 @@ class Death(private val population: Population, private val updater: Updater) {
      * Function for the death of entities by swallowing by another entities.
      * Encapsulates the private processSwallowing function.
      */
-    fun processSwallowing(evolutionCycleNumber: Int): List<Entity> {
+    fun processSwallowing(): List<Entity> {
         val swallowed = mutableListOf<Entity>()
         population.aliveEntities().forEach { entity ->
             swallowed.addAll(processSwallowing(entity))
         }
         if (swallowed.isNotEmpty()) {
-            updater.updateBoard(
+            /*board.updateBoard(
                 evolutionCycleNumber,
                 listOf("swallowed entities: ${swallowed.joinToString(", ")}}", population.toString())
-            )
+            )*/
+            board.update(population.aliveEntitiesPositions())
         }
         return swallowed
     }

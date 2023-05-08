@@ -134,8 +134,8 @@ data class Population(
 
             // generate positions for the entities in the population
             val areas = mutableListOf<Coordinate>()
-            for (rowIndex in 1..board.boardSize.numberOfRows step EntitySize.MIN_ENTITY_AREA_SIDE_SIZE) {
-                for (positionInRow in 1..board.boardSize.rowLength step EntitySize.MIN_ENTITY_AREA_SIDE_SIZE) {
+            for (rowIndex in 0 until board.boardSize.numberOfRows step EntitySize.MIN_ENTITY_AREA_SIDE_SIZE) {
+                for (positionInRow in 0 until board.boardSize.rowLength step EntitySize.MIN_ENTITY_AREA_SIDE_SIZE) {
                     areas.add(Coordinate(positionInRow, rowIndex))
                 }
             }

@@ -23,7 +23,7 @@ and the size of the board.
 
 ### D)
 1. Add footer to gif, it can contain info about the population state and evolution cycle.
-2. 
+2. Add progress bar on gif generation
 
 ### E)
-1. Split visual and logical parts of BOARD class.
+1. Split visual and logical parts of BOARD class. (DONE - PR)

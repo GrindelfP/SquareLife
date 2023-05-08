@@ -5,7 +5,7 @@ import tech.onsibey.squarelife.TestData
 import tech.onsibey.squarelife.simulator.entities.Coordinate
 import tech.onsibey.squarelife.detector.datainterpreter.Interpreter
 import tech.onsibey.squarelife.TestData.generateTestImageBoard
-import tech.onsibey.squarelife.visualisation.GifEvolutionCycleVisualizer
+import tech.onsibey.squarelife.visualisation.GifEvolutionCycleGenerator
 
 class UkkoTest {
     private val testImageBoard = generateTestImageBoard(
@@ -36,6 +36,6 @@ class UkkoTest {
         val mail = Interpreter(testImageBoard).prepareMailman()
 
         val result = Ukko(mail = mail, evolutionCycleLimit = 45).evolutionResult
-        GifEvolutionCycleVisualizer(result).visualize()
+        GifEvolutionCycleGenerator(result).visualize()
     }
 }

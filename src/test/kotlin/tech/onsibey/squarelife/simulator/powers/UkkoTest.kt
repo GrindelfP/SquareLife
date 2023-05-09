@@ -2,9 +2,9 @@ package tech.onsibey.squarelife.simulator.powers
 
 import org.junit.jupiter.api.Test
 import tech.onsibey.squarelife.TestData
-import tech.onsibey.squarelife.simulator.entities.Coordinate
-import tech.onsibey.squarelife.detector.datainterpreter.Interpreter
 import tech.onsibey.squarelife.TestData.generateTestImageBoard
+import tech.onsibey.squarelife.detector.datainterpreter.Interpreter
+import tech.onsibey.squarelife.simulator.entities.Coordinate
 import tech.onsibey.squarelife.visualisation.GifEvolutionCycleGenerator
 
 class UkkoTest {

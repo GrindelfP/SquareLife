@@ -1,11 +1,9 @@
 package tech.onsibey.squarelife.detector.datainterpreter
 
-import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
 import tech.onsibey.squarelife.common.EntitySize.KUVAHAKU_SIZE
 import tech.onsibey.squarelife.common.EntitySize.KUVAT_SIZE
 import tech.onsibey.squarelife.common.EntitySize.UUTISET_SIZE
-import tech.onsibey.squarelife.simulator.entities.Coordinate
-import tech.onsibey.squarelife.simulator.entities.BoardSize
+import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
 import tech.onsibey.squarelife.simulator.entities.*
 
 /**
@@ -45,17 +43,17 @@ class Interpreter(private val imageBoard: ImageBoard) {
             if (kuvatChecked(x = coordinate.x, y = coordinate.y)) {
                 if (uutisetChecked(x = coordinate.x, y = coordinate.y)) {
                     entities.add(
-                        EntityInfo(Uutiset::class, initUutisetCoordinates(topLeftX = coordinate.x + 1, topLeftY = coordinate.y + 1))
+                        EntityInfo(Uutiset::class, initUutisetCoordinates(topLeftX = coordinate.x, topLeftY = coordinate.y))
                     )
                     freeEntitySpace(topLeftX = coordinate.x, topLeftY = coordinate.y, entitySize = UUTISET_SIZE)
                 } else {
                     entities.add(
-                        EntityInfo(Kuvat::class, initKuvatCoordinates(topLeftX = coordinate.x + 1, topLeftY = coordinate.y + 1))
+                        EntityInfo(Kuvat::class, initKuvatCoordinates(topLeftX = coordinate.x, topLeftY = coordinate.y))
                     )
                     freeEntitySpace(topLeftX = coordinate.x, topLeftY = coordinate.y, entitySize = KUVAT_SIZE)
                 }
             } else {
-                entities.add(EntityInfo(Kuvahaku::class, initKuvahakuCoordinates(x = coordinate.x + 1, y = coordinate.y + 1)))
+                entities.add(EntityInfo(Kuvahaku::class, initKuvahakuCoordinates(x = coordinate.x, y = coordinate.y)))
                 freeEntitySpace(topLeftX = coordinate.x, topLeftY = coordinate.y, entitySize = KUVAHAKU_SIZE)
             }
         }

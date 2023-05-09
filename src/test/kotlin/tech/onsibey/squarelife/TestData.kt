@@ -1,8 +1,8 @@
 package tech.onsibey.squarelife
 
-import tech.onsibey.squarelife.simulator.entities.Coordinate
 import tech.onsibey.squarelife.detector.imageprocessor.Cell
 import tech.onsibey.squarelife.detector.imageprocessor.ImageBoard
+import tech.onsibey.squarelife.simulator.entities.Coordinate
 
 object TestData {
 
@@ -15,6 +15,10 @@ object TestData {
         val imageBoardList = mutableListOf<MutableList<Cell>>()
         val occupiedCells = testUutisetData.coordinates() +
                 testKuvahakuData.flatMap { it.coordinates() } + testKuvatData.flatMap { it.coordinates() }
+
+        require(occupiedCells.all { it.x < boardSize && it.y < boardSize }) {
+            "Test data contains coordinates that are out of bounds of the board"
+        }
 
         for (i in 0 until boardSize) {
             val row = mutableListOf<Cell>()

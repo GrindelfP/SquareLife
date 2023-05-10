@@ -37,40 +37,41 @@ class InterpreterTest {
     )
 
     private val testEntityList = listOf(
-        Kuvahaku(Position(setOf(Coordinate(1, 1)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(3, 1)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(0, 0)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(2, 0)), Board(TEST_IMAGE_BOARD_SIZE))),
         Kuvat(
             Position(setOf(
-                Coordinate(9, 1), Coordinate(9, 2),
-            Coordinate(10, 1), Coordinate(10, 2)
+                Coordinate(8, 0), Coordinate(8, 1),
+                Coordinate(9, 0), Coordinate(9, 1)
             ), Board(TEST_IMAGE_BOARD_SIZE)
-        )
+            )
         ),
         Kuvat(
             Position(setOf(
-                Coordinate(2, 3), Coordinate(3, 3),
-            Coordinate(2, 4), Coordinate(3, 4)
+                Coordinate(1, 2), Coordinate(2, 2),
+                Coordinate(1, 3), Coordinate(2, 3)
             ), Board(TEST_IMAGE_BOARD_SIZE)
-        )
+            )
         ),
-        Kuvahaku(Position(setOf(Coordinate(5, 4)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(4, 3)), Board(TEST_IMAGE_BOARD_SIZE))),
         Uutiset(
             Position(setOf(
-                Coordinate(7, 5), Coordinate(8, 5), Coordinate(9, 5),
-            Coordinate(7, 6), Coordinate(8, 6), Coordinate(9, 6),
-            Coordinate(7, 7), Coordinate(8, 7), Coordinate(9, 7)
+                Coordinate(6, 4), Coordinate(7, 4), Coordinate(8, 4),
+                Coordinate(6, 5), Coordinate(7, 5), Coordinate(8, 5),
+                Coordinate(6, 6), Coordinate(7, 6), Coordinate(8, 6)
             ), Board(TEST_IMAGE_BOARD_SIZE)
-        )
+            )
         ),
-        Kuvahaku(Position(setOf(Coordinate(1, 6)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(1, 7)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(1, 8)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(4, 9)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(5, 9)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(8, 9)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(9, 9)), Board(TEST_IMAGE_BOARD_SIZE))),
-        Kuvahaku(Position(setOf(Coordinate(8, 10)), Board(TEST_IMAGE_BOARD_SIZE)))
+        Kuvahaku(Position(setOf(Coordinate(0, 5)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(0, 6)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(0, 7)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(3, 8)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(4, 8)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(7, 8)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(8, 8)), Board(TEST_IMAGE_BOARD_SIZE))),
+        Kuvahaku(Position(setOf(Coordinate(7, 9)), Board(TEST_IMAGE_BOARD_SIZE)))
     )
+
 
     private val testEntityNames = listOf(
         "Kuvahaku",

@@ -44,10 +44,10 @@ object Communicator {
     }
 
     fun negotiatePhoto(): String {
-        var absolutePath = ""
+        //var absolutePath = ""
         while (true) {
             print("Please, provide an absolute path to your source photo: ")
-            absolutePath = readln()
+            val absolutePath = readln()
             try {
                 File(absolutePath).walk().any { !(it.isFile && it.name.endsWith(".jpg")) }
                 return absolutePath

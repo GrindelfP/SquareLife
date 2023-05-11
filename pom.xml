@@ -84,6 +84,11 @@
             <version>3.24.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency> <!--image recognition-->
+            <groupId>net.imagej</groupId>
+            <artifactId>ij</artifactId>
+            <version>1.53g</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

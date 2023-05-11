@@ -32,7 +32,7 @@ class UkkoTest {
     )
 
     @Test
-    fun `GIVEN valid imageBoard`() {
+    fun `GIVEN imageBoard WHEN run Ukko evolution THEN gif of the arkestor is processed`() {
         val mail = Interpreter(testImageBoard).prepareMailman()
 
         val result = Ukko(mail = mail, evolutionCycleLimit = 45).evolutionResult

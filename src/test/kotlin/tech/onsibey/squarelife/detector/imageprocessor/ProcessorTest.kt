@@ -7,8 +7,10 @@ internal class ProcessorTest {
 
     @Test
     fun `GIVEN WHEN THEN`() {
-        val pathToPhoto = "REPLACE_ME_WITH_PATH_TO_PHOTO"
+        val pathToPhoto = "/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1.jpeg"
         val imageBoard = Processor(pathToPhoto).processImageBoard()
+
+        println(imageBoard)
 
         // Just writing the image board to a file for a visual validation
         val stringBuilder = StringBuilder()

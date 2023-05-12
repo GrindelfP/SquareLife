@@ -89,6 +89,11 @@
             <artifactId>ij</artifactId>
             <version>1.53g</version>
         </dependency>
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>3.4.2-0</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

@@ -8,11 +8,9 @@ import java.io.File
 internal class ProcessorTest {
 
     @Test
-    fun `GIVEN WHEN THEN`() {
+    fun `GIVEN board image WHEN image is processed THEN image board generated`() {
         val pathToPhoto = "/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1.jpeg"
         val imageBoard = Processor(pathToPhoto).processImageBoard()
-
-        println(imageBoard)
 
         // Just writing the image board to a file for a visual validation
         val stringBuilder = StringBuilder()
@@ -34,7 +32,7 @@ internal class ProcessorTest {
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 4.jpg",
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 8.jpg",
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/4, 4.jpg",
-            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/7, 0.jpg",
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/7, 0.jpg"
         )
         val images = paths.map { path ->
             ImagePlus(path)
@@ -55,7 +53,7 @@ internal class ProcessorTest {
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/2, 7.jpg",
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 0.jpg",
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 3.jpg"
-            )
+        )
         val images = paths.map { path ->
             ImagePlus(path)
         }

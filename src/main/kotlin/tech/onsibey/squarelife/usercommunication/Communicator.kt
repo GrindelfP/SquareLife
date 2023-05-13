@@ -43,8 +43,7 @@ object Communicator {
         }
     }
 
-    fun negotiatePhoto(): String {
-        //var absolutePath = ""
+    fun getImagePathFromUser(): String {
         while (true) {
             print("Please, provide an absolute path to your source photo: ")
             val absolutePath = readln()

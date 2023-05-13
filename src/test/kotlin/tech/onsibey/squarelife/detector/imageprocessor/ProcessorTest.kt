@@ -10,7 +10,7 @@ internal class ProcessorTest {
     @Test
     fun `GIVEN board image WHEN image is processed THEN image board generated`() {
         val pathToPhoto = "/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1.jpeg"
-        val imageBoard = Processor(pathToPhoto).processImageBoard()
+        val imageBoard = Processor.processImageBoard(pathToPhoto)
 
         // Just writing the image board to a file for a visual validation
         val stringBuilder = StringBuilder()
@@ -41,7 +41,7 @@ internal class ProcessorTest {
             image.dominantColour()
         }
         dominantColours.forEach { colour ->
-            assertThat(colour).isEqualTo(CellColor.BLACK)
+            assertThat(colour).isEqualTo(Color.BLACK)
         }
     }
 
@@ -61,7 +61,7 @@ internal class ProcessorTest {
             image.dominantColour()
         }
         dominantColours.forEach { colour ->
-            assertThat(colour).isEqualTo(CellColor.WHITE)
+            assertThat(colour).isEqualTo(Color.WHITE)
         }
     }
 }

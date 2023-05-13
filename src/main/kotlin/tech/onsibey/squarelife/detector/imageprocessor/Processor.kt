@@ -7,83 +7,21 @@ import ij.process.ImageProcessor.MIN
 import java.awt.Rectangle
 import java.io.File
 import javax.imageio.ImageIO
+import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
+import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.recognizeDominantColours
 
 
-class Processor(private val pathToImage: String) : GridCellsRecognition {
-    companion object {
-        private const val COLOR_THRESHOLD = 128
-    }
+object Processor {
+    const val COLOR_THRESHOLD = 128
 
-    fun processImageBoard(): ImageBoard = ImageBoard(analyzeGrid(File(pathToImage)))
+    fun processImageBoard(pathToImage: String): ImageBoard = ImageBoard(cells(File(pathToImage)))
 
-    override fun divideImageByGrid(imagePlus: ImagePlus, gridSize: Int): List<List<ImagePlus>> {
-        val imageProcessor = imagePlus.processor
-        val imageWidth = imageProcessor.width
-        val imageHeight = imageProcessor.height
-
-        val cellWidth = imageWidth / gridSize
-        val cellHeight = imageHeight / gridSize
-
-        val cells = mutableListOf<MutableList<ImagePlus>>()
-
-        for (y in 0 until gridSize) {
-            val row = mutableListOf<ImagePlus>()
-            for (x in 0 until gridSize) {
-                val bufferImageProcessor = imageProcessor
-                bufferImageProcessor.roi = Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)
-                row.add(ImagePlus("$x, $y", bufferImageProcessor.crop()))
-
-            }
-            cells.add(row)
-        }
-
-        cells.forEach { row ->
-            row.forEach { cell ->
-                cell.write()
-            }
-        }
-
-        return cells
-    }
-
-    private fun ImagePlus.write() {
-        ImageIO.write(this.processor.bufferedImage, "jpg", File("cells/${this.title}.jpg"))
-    }
-
-    override fun recognizeDominantColours(images: List<List<ImagePlus>>): List<List<CellColor>> {
-        val cellsByColors = mutableListOf<MutableList<CellColor>>()
-        images.forEach { rowOfImages ->
-            val cellsRow = mutableListOf<CellColor>()
-            rowOfImages.forEach { image ->
-                cellsRow.add(image.dominantColour())
-            }
-            cellsByColors.add(cellsRow)
-        }
-
-        return cellsByColors
-    }
-
-    private fun ImagePlus.dominantColour(): CellColor {
-        var lightSide = 0
-        var darkSide = 0
-
-        for (x in 0 until bufferedImage.width) {
-            for (y in 0 until bufferedImage.height) {
-                val color = bufferedImage.getRGB(x, y) // TODO: check the color return of the .getRGB() method
-                if (color in 0 .. 128) darkSide++
-                else lightSide++
-            }
-        }
-
-        return if (lightSide > darkSide) CellColor.WHITE else CellColor.BlACK
-    }
-
-    private fun convertToCells(analyzedGrid: List<List<CellColor>>): List<List<Cell>> {
+    private fun convertToCells(analyzedGrid: List<List<Color>>): List<List<Cell>> { // TESTED
         val cells = mutableListOf<MutableList<Cell>>()
         analyzedGrid.forEach { row ->
             val rowCells = mutableListOf<Cell>()
             row.forEach { cell ->
-                val interpretedCell = if (cell == CellColor.BlACK) Cell(true) else Cell(false)
+                val interpretedCell = if (cell == Color.BLACK) Cell(true) else Cell(false)
                 rowCells.add(interpretedCell)
             }
             cells.add(rowCells)
@@ -92,34 +30,35 @@ class Processor(private val pathToImage: String) : GridCellsRecognition {
         return cells
     }
 
-    private fun analyzeGrid(file: File): List<List<Cell>> {
+    private fun cells(file: File): List<List<Cell>> {
         val imagePlus = IJ.openImage(file.absolutePath)
-        require(imagePlus != null) { "There is no image in provided path: $pathToImage" }
+        require(imagePlus != null) { "There is no image in provided path: ${file.absolutePath}" }
 
-        val croppedImageProcessor = cropImage(imagePlus.processor) // cropping the image to the size of the grid
+        // cropping the image to the size of the grid
+        val isolatedGameBoardProcessor = imagePlus.processor.isolatedGameBoard()
 
-        croppedImageProcessor.filter(MIN) // Trying to smooth the color of the image
+        isolatedGameBoardProcessor.filter(MIN) // Trying to smooth the color of the image TODO: try apllying MAX
         repeat(30) {
-            croppedImageProcessor.smooth()
+            isolatedGameBoardProcessor.smooth()
         }
 
         // Uncomment to save and take a look at the cropped picture
-        ImageIO.write(croppedImageProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
+        ImageIO.write(isolatedGameBoardProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
 
         // split image into cells
-        val cells = divideImageByGrid(ImagePlus("croppedImage", croppedImageProcessor), 10)
+        val cells: List<List<ImagePlus>> = divideImageByGrid(isolatedGameBoardProcessor, 82, 71, 10, 10)
 
-        val cellsColors = recognizeDominantColours(cells) // get each sell's colour (black or white)
+        val cellsColors: List<List<Color>> = recognizeDominantColours(cells) // get each sell's colour (black or white)
 
-        return convertToCells(cellsColors) // interpret c
+        return convertToCells(cellsColors) // interpret colors
     }
 
-    private fun cropImage(imageProcessor: ImageProcessor): ImageProcessor {
-        imageProcessor.smooth() // Smooth the image to remove noise
+    private fun ImageProcessor.isolatedGameBoard(): ImageProcessor {
+        this.smooth() // Smooth the image to remove noise
 
         // Color COLOR_COLOR_THRESHOLD to convert the image to black and white
-        val imageWidth = imageProcessor.width
-        val imageHeight = imageProcessor.height
+        val imageWidth = this.width
+        val imageHeight = this.height
 
         // Crop the original image to the size of the grid image
         // 1. Find the boundaries of the grid image
@@ -129,7 +68,7 @@ class Processor(private val pathToImage: String) : GridCellsRecognition {
         var right: Int = -100
         for (y in 0 until imageHeight) {
             for (x in 0 until imageWidth) {
-                if (imageProcessor.getValue(x, y) < COLOR_THRESHOLD) {
+                if (this.getValue(x, y) < COLOR_THRESHOLD) {
                     if (top == -100) top = y
                     if (top > y) top = y
 
@@ -149,14 +88,14 @@ class Processor(private val pathToImage: String) : GridCellsRecognition {
         val gridWidth = right - left
         val gridHeight = bottom - top
 
-        imageProcessor.roi = Rectangle(left, top, gridWidth, gridHeight)
+        this.roi = Rectangle(left, top, gridWidth, gridHeight)
 
-        return imageProcessor.crop()
+        return this.crop()
     }
 }
 
-enum class CellColor {
-    BlACK,
+enum class Color {
+    BLACK,
     WHITE
 }
 
@@ -166,4 +105,24 @@ data class Cell(var isPainted: Boolean) {
     fun reverseState() {
         this.isPainted = !isPainted
     }
+}
+
+fun ImagePlus.dominantColour(): Color {
+    var lightSide = 0
+    var darkSide = 0
+
+    for (x in 0 until bufferedImage.width) {
+        for (y in 0 until bufferedImage.height) {
+            val pixelColor = this.getColor(x, y)
+            if (pixelColor == Color.WHITE) lightSide++
+            else darkSide++
+        }
+    }
+
+    return if (lightSide > darkSide) Color.WHITE else Color.BLACK
+}
+
+fun ImagePlus.getColor(x: Int, y: Int): Color {
+    val pixelColourRGB = processor.getValue(x, y)
+    return if (pixelColourRGB > Processor.COLOR_THRESHOLD) Color.WHITE else Color.BLACK
 }

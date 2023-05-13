@@ -7,7 +7,7 @@ import tech.onsibey.squarelife.simulator.powers.Ukko
 import tech.onsibey.squarelife.usercommunication.Communicator.askNumberOfCycles
 import tech.onsibey.squarelife.usercommunication.Communicator.greetUser
 import tech.onsibey.squarelife.usercommunication.Communicator.initializationFromPhoto
-import tech.onsibey.squarelife.usercommunication.Communicator.negotiatePhoto
+import tech.onsibey.squarelife.usercommunication.Communicator.getImagePathFromUser
 import tech.onsibey.squarelife.visualisation.GifEvolutionCycleGenerator
 
 object Program {
@@ -17,7 +17,8 @@ object Program {
 
         val god = when {
             initializationFromPhoto() -> {
-                val imageBoard = Processor(negotiatePhoto()).processImageBoard()
+                val pathToImage = getImagePathFromUser()
+                val imageBoard = Processor.processImageBoard(pathToImage)
                 val mail = Interpreter(imageBoard).prepareMailman()
 
                 Ukko(mail, askNumberOfCycles())

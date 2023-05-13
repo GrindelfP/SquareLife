@@ -33,20 +33,37 @@ internal class ProcessorTest {
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 6.jpg",
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 4.jpg",
             "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 8.jpg",
-            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/4, 4.jpg"
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/4, 4.jpg",
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/7, 0.jpg",
         )
-        val images = listOf(
-            ImagePlus(paths[0]),
-            ImagePlus(paths[1]),
-            ImagePlus(paths[2]),
-            ImagePlus(paths[3])
-        )
+        val images = paths.map { path ->
+            ImagePlus(path)
+        }
         val dominantColours = images.map { image ->
             image.dominantColour()
         }
-
         dominantColours.forEach { colour ->
             assertThat(colour).isEqualTo(CellColor.BLACK)
+        }
+    }
+
+    @Test
+    fun `GIVEN mostly white images WHEN dominant colours are estimated THEN white colours is returned`() {
+        val paths = listOf(
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/1, 9.jpg",
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/2, 3.jpg",
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/2, 7.jpg",
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 0.jpg",
+            "/Users/grindelf/Programming/Onsibey/SquareLife/cells/3, 3.jpg"
+            )
+        val images = paths.map { path ->
+            ImagePlus(path)
+        }
+        val dominantColours = images.map { image ->
+            image.dominantColour()
+        }
+        dominantColours.forEach { colour ->
+            assertThat(colour).isEqualTo(CellColor.WHITE)
         }
     }
 }

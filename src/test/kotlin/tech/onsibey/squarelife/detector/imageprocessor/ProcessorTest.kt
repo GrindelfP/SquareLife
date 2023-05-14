@@ -5,7 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class ProcessorTest {
+class ProcessorTest {
 
     @Test
     fun `GIVEN board image WHEN image is processed THEN image board generated`() {
@@ -16,11 +16,10 @@ internal class ProcessorTest {
         val stringBuilder = StringBuilder()
         imageBoard.cells.forEach { row ->
             row.forEach { cell ->
-                stringBuilder.append(if (cell.isPainted) "░" else "█")
+                stringBuilder.append(if (cell.isPainted) "█" else "░")
             }
             stringBuilder.append("\n")
         }
-
         File("testos.txt").writeText(stringBuilder.toString())
     }
 

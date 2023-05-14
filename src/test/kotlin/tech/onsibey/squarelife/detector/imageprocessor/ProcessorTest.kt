@@ -37,7 +37,7 @@ class ProcessorTest {
             ImagePlus(path)
         }
         val dominantColours = images.map { image ->
-            image.dominantColour()
+            image.processor.dominantColour()
         }
         dominantColours.forEach { colour ->
             assertThat(colour).isEqualTo(Color.BLACK)
@@ -57,7 +57,7 @@ class ProcessorTest {
             ImagePlus(path)
         }
         val dominantColours = images.map { image ->
-            image.dominantColour()
+            image.processor.dominantColour()
         }
         dominantColours.forEach { colour ->
             assertThat(colour).isEqualTo(Color.WHITE)

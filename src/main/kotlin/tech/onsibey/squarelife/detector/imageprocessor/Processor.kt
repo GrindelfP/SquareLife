@@ -1,7 +1,6 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.IJ
-import ij.ImagePlus
 import ij.process.ImageProcessor
 import ij.process.ImageProcessor.MIN
 import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
@@ -46,7 +45,7 @@ object Processor {
         ImageIO.write(isolatedGameBoardProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
 
         // split image into cells
-        val cells: List<List<ImagePlus>> = divideImageByGrid(isolatedGameBoardProcessor, 82, 71, 10, 10)
+        val cells: List<List<ImageProcessor>> = divideImageByGrid(isolatedGameBoardProcessor)
 
         val cellsColors: List<List<Color>> = recognizeDominantColours(cells) // get each sell's colour (black or white)
 
@@ -107,7 +106,7 @@ data class Cell(var isPainted: Boolean) {
     }
 }
 
-fun ImagePlus.dominantColour(): Color {
+fun ImageProcessor.dominantColour(): Color {
     var lightSide = 0
     var darkSide = 0
 
@@ -122,7 +121,7 @@ fun ImagePlus.dominantColour(): Color {
     return if (lightSide > darkSide) Color.WHITE else Color.BLACK
 }
 
-fun ImagePlus.getColor(x: Int, y: Int): Color {
-    val pixelColourRGB = processor.getValue(x, y)
+fun ImageProcessor.getColor(x: Int, y: Int): Color {
+    val pixelColourRGB = this.getValue(x, y)
     return if (pixelColourRGB > Processor.COLOR_THRESHOLD) Color.WHITE else Color.BLACK
 }

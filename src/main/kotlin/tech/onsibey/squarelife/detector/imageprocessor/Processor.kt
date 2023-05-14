@@ -4,11 +4,11 @@ import ij.IJ
 import ij.ImagePlus
 import ij.process.ImageProcessor
 import ij.process.ImageProcessor.MIN
+import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
+import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.recognizeDominantColours
 import java.awt.Rectangle
 import java.io.File
 import javax.imageio.ImageIO
-import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
-import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.recognizeDominantColours
 
 
 object Processor {
@@ -37,7 +37,7 @@ object Processor {
         // cropping the image to the size of the grid
         val isolatedGameBoardProcessor = imagePlus.processor.isolatedGameBoard()
 
-        isolatedGameBoardProcessor.filter(MIN) // Trying to smooth the color of the image TODO: try apllying MAX
+        isolatedGameBoardProcessor.filter(MIN) // Trying to smooth the color of the image
         repeat(30) {
             isolatedGameBoardProcessor.smooth()
         }

@@ -29,9 +29,9 @@ object ImageJGridCellRecognition : GridCellsRecognition {
         // maybe return ImageProcessor instead of ImagePlus?
         val cells = mutableListOf<MutableList<ImagePlus>>()
 
-        for (x in 0 until numberOfRows) {
+        for (y in 0 until numberOfColumns) {
             val row = mutableListOf<ImagePlus>()
-            for (y in 0 until numberOfColumns) {
+            for (x in 0 until numberOfRows) {
                 imageProcessor.roi = Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)
                 row.add(ImagePlus("$x, $y", imageProcessor.crop()))
             }

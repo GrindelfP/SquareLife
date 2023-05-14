@@ -1,7 +1,6 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.ImagePlus
-import kotlin.math.roundToInt
 
 object BoardRecognizer {
     fun getBoardParameters(imagePlus: ImagePlus, cellParameters: CellParameters): BoardParameters {
@@ -75,15 +74,10 @@ object BoardRecognizer {
             }
         }
 
-        val paretoWidths = paretoSet(setOfWidths, imagePlus.processor.width)
-        val paretoHeights = paretoSet(setOfHeights, imagePlus.processor.height)
+        val averageWidth = SingleCriteriaParetoSet(setOfWidths.toList()).averageInt()
+        val averageHeights = SingleCriteriaParetoSet(setOfHeights.toList()).averageInt()
 
-        return CellParameters(paretoWidths.average().roundToInt(), paretoHeights.average().roundToInt())
-    }
-
-    private fun paretoSet(initialSet: MutableSet<Int>, dimension: Int): Set<Int> {
-        val setWithoutDeviations = initialSet.filter { element -> element >= dimension * 0.9 }
-        TODO()
+        return CellParameters(averageWidth, averageHeights)
     }
 }
 

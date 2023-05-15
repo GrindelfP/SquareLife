@@ -16,7 +16,7 @@ class ProcessorTest {
         val stringBuilder = StringBuilder()
         imageBoard.cells.forEach { row ->
             row.forEach { cell ->
-                stringBuilder.append(if (cell.isPainted) "█" else "░")
+                stringBuilder.append(if (cell.isPainted) "██" else "░░")
             }
             stringBuilder.append("\n")
         }

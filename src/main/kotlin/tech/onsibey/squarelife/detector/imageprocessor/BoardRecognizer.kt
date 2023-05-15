@@ -1,13 +1,16 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.process.ImageProcessor
+import kotlin.math.roundToInt
 
 object BoardRecognizer {
-    fun getBoardParameters(imageProcessor: ImageProcessor): BoardParameters {
-        var numberOfRows = 0
-        var numberOfColumns = 0
+    private const val MIN_LINE_LENGTH = 2
 
-        for (x in 0 until imageProcessor.width) {
+    fun getBoardParameters(imageProcessor: ImageProcessor, cellParameters: CellParameters): BoardParameters {
+        val numberOfRows = ((imageProcessor.height).toDouble() / (cellParameters.height).toDouble()).roundToInt()
+        val numberOfColumns = ((imageProcessor.width).toDouble() / (cellParameters.width).toDouble()).roundToInt()
+
+        /*for (x in 0 until imageProcessor.width) {
             var periodCounter = 0
             for (y in 0 until imageProcessor.height) {
                 if (imageProcessor.getColor(x, y) != Color.WHITE && periodCounter != 0) {
@@ -27,7 +30,7 @@ object BoardRecognizer {
                 }
                 if (imageProcessor.getColor(x, y) == Color.WHITE) periodCounter++
             }
-        }
+        }*/
 
         return BoardParameters(numberOfRows, numberOfColumns)
     }
@@ -36,25 +39,25 @@ object BoardRecognizer {
         val imageWidth = imageProcessor.width
         val imageHeight = imageProcessor.height
 
-        val setOfWidths = getWhiteLines(Direction.HORIZONTAL, imageWidth, imageHeight, imageProcessor)
-        val setOfHeights = getWhiteLines(Direction.VERTICAL, imageWidth, imageHeight, imageProcessor)
+        val listOfWidths = getHorizontalWhiteLines(imageWidth, imageHeight, imageProcessor)
+        val listOfHeights = getVerticalWhiteLines(imageWidth, imageHeight, imageProcessor)
 
-        if (setOfWidths.isEmpty() || setOfHeights.isEmpty()) throw Exception("No cells found!")
+        require(listOfWidths.isNotEmpty() && listOfHeights.isNotEmpty()) { "No cells found!" }
 
-        return when {
-            setOfWidths.size == 1 && setOfHeights.size == 1 -> {
-                CellParameters(setOfWidths.first(), setOfHeights.first())
-            }
-            else -> {
-                val averageWidth = SingleCriteriaParetoSet(setOfWidths.toList()).averageInt()
-                val averageHeights = SingleCriteriaParetoSet(setOfHeights.toList()).averageInt()
-                CellParameters(averageWidth, averageHeights)
-            }
-        }
+        val averageWidth = SingleCriteriaParetoSet(listOfWidths, 10).averageInt()
+        val averageHeights = SingleCriteriaParetoSet(listOfHeights, 10).averageInt()
+
+        return CellParameters(averageWidth, averageHeights)
     }
 
-    private fun getWhiteLines(direction: Direction, width: Int, height: Int, imageProcessor: ImageProcessor) : Set<Int> {
-        val whiteLines = mutableSetOf<Int>()
+
+    private fun getWhiteLines(
+        direction: Direction,
+        width: Int,
+        height: Int,
+        imageProcessor: ImageProcessor
+    ): List<Int> {
+        val whiteLines = mutableListOf<Int>()
 
         val widthLimit = when (direction) {
             Direction.HORIZONTAL -> width
@@ -82,16 +85,52 @@ object BoardRecognizer {
                 if (imageProcessor.getColor(xToCheck, yToCheck) != Color.WHITE && periodCounter != 0) {
                     periodCounter = 0
                     whiteLines.add(periodCounter)
-                }
-                else if (x == imageProcessor.height - 1) {
+                } else if (xToCheck == widthLimit - 1) {
                     whiteLines.add(periodCounter + 1)
                     periodCounter = 0
-                }
-                else if (imageProcessor.getColor(xToCheck, yToCheck) == Color.WHITE) periodCounter++
+                } else if (imageProcessor.getColor(xToCheck, yToCheck) == Color.WHITE) periodCounter++
             }
         }
 
-        return whiteLines
+        return whiteLines.filter { integer -> integer > 0 }
+    }
+
+    private fun getHorizontalWhiteLines(width: Int, height: Int, imageProcessor: ImageProcessor): List<Int> {
+        val whiteLines = mutableListOf<Int>()
+
+        for (y in 0 until height) {
+            var periodCounter = 0
+            for (x in 0 until width) {
+                if (imageProcessor.getColor(x, y) != Color.WHITE && periodCounter != 0) {
+                    periodCounter = 0
+                    whiteLines.add(periodCounter)
+                } else if (x == width - 1) {
+                    whiteLines.add(periodCounter + 1)
+                    periodCounter = 0
+                } else if (imageProcessor.getColor(x, y) == Color.WHITE) periodCounter++
+            }
+        }
+
+        return whiteLines.filter { integer -> integer >= MIN_LINE_LENGTH }
+    }
+
+    private fun getVerticalWhiteLines(width: Int, height: Int, imageProcessor: ImageProcessor): List<Int> {
+        val whiteLines = mutableListOf<Int>()
+
+        for (x in 0 until width) {
+            var periodCounter = 0
+            for (y in 0 until height) {
+                if (imageProcessor.getColor(x, y) != Color.WHITE && periodCounter != 0) {
+                    periodCounter = 0
+                    whiteLines.add(periodCounter)
+                } else if (y == height - 1) {
+                    whiteLines.add(periodCounter + 1)
+                    periodCounter = 0
+                } else if (imageProcessor.getColor(x, y) == Color.WHITE) periodCounter++
+            }
+        }
+
+        return whiteLines.filter { integer -> integer >= MIN_LINE_LENGTH }
     }
 }
 

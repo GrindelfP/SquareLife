@@ -2,12 +2,12 @@ package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.IJ
 import ij.process.ImageProcessor
-import ij.process.ImageProcessor.MIN
 import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
 import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.recognizeDominantColours
 import java.awt.Rectangle
 import java.io.File
 import javax.imageio.ImageIO
+import kotlin.math.roundToInt
 
 
 object Processor {
@@ -36,10 +36,10 @@ object Processor {
         // cropping the image to the size of the grid
         val isolatedGameBoardProcessor = imagePlus.processor.isolatedGameBoard()
 
-        isolatedGameBoardProcessor.filter(MIN) // Trying to smooth the color of the image
+        /*isolatedGameBoardProcessor.filter(MIN) // Trying to smooth the color of the image
         repeat(30) {
             isolatedGameBoardProcessor.smooth()
-        }
+        }*/
 
         // Uncomment to save and take a look at the cropped picture
         ImageIO.write(isolatedGameBoardProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
@@ -107,8 +107,32 @@ data class Cell(var isPainted: Boolean) {
 }
 
 fun ImageProcessor.dominantColour(): Color {
-    var lightSide = 0
-    var darkSide = 0
+    val toleranceThreshold = 0.6
+    val pixelsCount = (this.width * this.height).toDouble()
+    val colors = this.countColors()
+    val lightSide = colors.light
+    val darkSide = colors.dark
+
+    // we need to check if we've covered all the pixels for color percentage checking
+    require(pixelsCount == lightSide + darkSide) { "Not all pixels are checked by color" }
+
+    return when {
+        (lightSide / pixelsCount >= toleranceThreshold) -> Color.WHITE
+        (darkSide / pixelsCount >= toleranceThreshold) -> Color.BLACK
+        (darkSide / pixelsCount < toleranceThreshold && darkSide / pixelsCount < toleranceThreshold) -> {
+            val quarterImageProcessor = this.similarQuarterRectangle()
+            quarterImageProcessor.dominantColour()
+        }
+        else -> {
+            require(this.width == 1 || this.height == 1 ) { "Image is not proper" }
+            if (this.getColor(0, 0) == Color.WHITE) Color.WHITE else Color.BLACK
+        }
+    }
+}
+
+fun ImageProcessor.countColors(): Colors {
+    var lightSide = 0.0
+    var darkSide = 0.0
 
     for (x in 0 until bufferedImage.width) {
         for (y in 0 until bufferedImage.height) {
@@ -118,10 +142,26 @@ fun ImageProcessor.dominantColour(): Color {
         }
     }
 
-    return if (lightSide > darkSide) Color.WHITE else Color.BLACK
+    return Colors(lightSide, darkSide)
+}
+
+private fun ImageProcessor.similarQuarterRectangle(): ImageProcessor {
+    val iterationsCoordinateCoefficient = 0.25
+    val iterationsSizeCoefficient = 0.5
+
+    val newX = (this.width * iterationsCoordinateCoefficient).roundToInt()
+    val newY = (this.height * iterationsCoordinateCoefficient).roundToInt()
+    val newWidth = (this.width * iterationsSizeCoefficient).roundToInt()
+    val newHeight = (this.height * iterationsSizeCoefficient).roundToInt()
+
+    this.roi = Rectangle(newX, newY, newWidth, newHeight)
+
+    return this.crop()
 }
 
 fun ImageProcessor.getColor(x: Int, y: Int): Color {
     val pixelColourRGB = this.getValue(x, y)
     return if (pixelColourRGB > Processor.COLOR_THRESHOLD) Color.WHITE else Color.BLACK
 }
+
+data class Colors(val light: Double, val dark: Double)

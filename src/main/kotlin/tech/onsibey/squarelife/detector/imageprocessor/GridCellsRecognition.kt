@@ -1,8 +1,6 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.process.ImageProcessor
-import tech.onsibey.squarelife.detector.imageprocessor.BoardRecognizer.getBoardParameters
-import tech.onsibey.squarelife.detector.imageprocessor.BoardRecognizer.getCellParameters
 import java.awt.Rectangle
 import java.io.File
 import javax.imageio.ImageIO
@@ -17,8 +15,9 @@ object ImageJGridCellRecognition : GridCellsRecognition {
     override fun divideImageByGrid(imageProcessor: ImageProcessor): List<List<ImageProcessor>> {
         val cells = mutableListOf<MutableList<ImageProcessor>>()
 
-        /*val boardParameters = getBoardParameters(imageProcessor)
-        val cellParameters = getCellParameters(imageProcessor)
+
+        /*val cellParameters = getCellParameters(imageProcessor)
+        val boardParameters = getBoardParameters(imageProcessor, cellParameters)
 
         val numberOfRows = boardParameters.numberOfRows
         val numberOfColumns = boardParameters.numberOfColumns
@@ -27,7 +26,7 @@ object ImageJGridCellRecognition : GridCellsRecognition {
 
         val numberOfRows = 10
         val numberOfColumns = 10
-        val cellHeight = 82
+        val cellHeight = 79
         val cellWidth = 71
 
 

@@ -9,7 +9,6 @@ import java.io.File
 import javax.imageio.ImageIO
 import kotlin.math.roundToInt
 
-
 object Processor {
     const val COLOR_THRESHOLD = 128
 

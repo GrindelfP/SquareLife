@@ -40,4 +40,5 @@ build/
 /.idea/
 cropped-preprocessed.jpg
 testos.txt
-photos
+u/cells/
+/photos/

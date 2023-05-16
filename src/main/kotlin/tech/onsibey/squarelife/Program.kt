@@ -8,7 +8,7 @@ import tech.onsibey.squarelife.usercommunication.Communicator
 import tech.onsibey.squarelife.usercommunication.Communicator.getCorrectPhotoInterpretationConfirmation
 import tech.onsibey.squarelife.usercommunication.Communicator.greetUser
 import tech.onsibey.squarelife.usercommunication.Communicator.initializationFromPhoto
-import tech.onsibey.squarelife.usercommunication.Communicator.negotiatePhoto
+import tech.onsibey.squarelife.usercommunication.Communicator.getImagePathFromUser
 import tech.onsibey.squarelife.visualisation.GifEvolutionCycleGenerator
 import kotlin.system.exitProcess
 
@@ -19,7 +19,8 @@ object Program {
 
         val god = when {
             initializationFromPhoto() -> {
-                val imageBoard = Processor(negotiatePhoto()).processImageBoard()
+                val pathToImage = getImagePathFromUser()
+                val imageBoard = Processor.processImageBoard(pathToImage)
                 val mail = Interpreter(imageBoard).prepareMailman()
 
                 val accepted = getCorrectPhotoInterpretationConfirmation(mail)

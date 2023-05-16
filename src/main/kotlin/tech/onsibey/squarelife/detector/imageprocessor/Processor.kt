@@ -106,42 +106,50 @@ data class Cell(var isPainted: Boolean) {
 }
 
 fun ImageProcessor.dominantColour(): Color {
-    val toleranceThreshold = 0.6
-    val pixelsCount = (this.width * this.height).toDouble()
+    val toleranceThreshold = 0.6 // 60% of the image should be of the same color
+    val pixelsCount = this.width * this.height
     val colors = this.countColors()
-    val lightSide = colors.light
-    val darkSide = colors.dark
 
     // we need to check if we've covered all the pixels for color percentage checking
-    require(pixelsCount == lightSide + darkSide) { "Not all pixels are checked by color" }
+    require(pixelsCount == colors.numberOfLightPixels + colors.numberOfDarkPixels)
+    { "Not all pixels are checked by color" }
+    
+    fun PixelColorCounter.colorIsDominating(isDark: Boolean): Boolean = when {
+        isDark -> numberOfDarkPixels.toDouble() / pixelsCount >= toleranceThreshold
+        else -> numberOfLightPixels.toDouble() / pixelsCount >= toleranceThreshold
+    }
+
+    fun PixelColorCounter.neitherColorIsDominating(): Boolean =
+        !this.colorIsDominating(isDark = true) && !this.colorIsDominating(isDark = false)
 
     return when {
-        (lightSide / pixelsCount >= toleranceThreshold) -> Color.WHITE
-        (darkSide / pixelsCount >= toleranceThreshold) -> Color.BLACK
-        (darkSide / pixelsCount < toleranceThreshold && darkSide / pixelsCount < toleranceThreshold) -> {
+        colors.colorIsDominating(isDark = false) -> Color.WHITE
+        colors.colorIsDominating(isDark = true) -> Color.BLACK
+        colors.neitherColorIsDominating() -> {
             val quarterImageProcessor = this.similarQuarterRectangle()
             quarterImageProcessor.dominantColour()
         }
+
         else -> {
-            require(this.width == 1 || this.height == 1 ) { "Image is not proper" }
+            require(this.width == 1 || this.height == 1) { "Image is not proper" }
             if (this.getColor(0, 0) == Color.WHITE) Color.WHITE else Color.BLACK
         }
     }
 }
 
-fun ImageProcessor.countColors(): Colors {
-    var lightSide = 0.0
-    var darkSide = 0.0
+fun ImageProcessor.countColors(): PixelColorCounter {
+    var numberOfLightPixels = 0
+    var numberOfDarkPixels = 0
 
     for (x in 0 until bufferedImage.width) {
         for (y in 0 until bufferedImage.height) {
             val pixelColor = this.getColor(x, y)
-            if (pixelColor == Color.WHITE) lightSide++
-            else darkSide++
+            if (pixelColor == Color.WHITE) numberOfLightPixels++
+            else numberOfDarkPixels++
         }
     }
 
-    return Colors(lightSide, darkSide)
+    return PixelColorCounter(numberOfLightPixels, numberOfDarkPixels)
 }
 
 private fun ImageProcessor.similarQuarterRectangle(): ImageProcessor {
@@ -163,4 +171,4 @@ fun ImageProcessor.getColor(x: Int, y: Int): Color {
     return if (pixelColourRGB > Processor.COLOR_THRESHOLD) Color.WHITE else Color.BLACK
 }
 
-data class Colors(val light: Double, val dark: Double)
+data class PixelColorCounter(val numberOfLightPixels: Int, val numberOfDarkPixels: Int)

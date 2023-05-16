@@ -1,11 +1,14 @@
 package tech.onsibey.squarelife.usercommunication
 
 import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
+import tech.onsibey.squarelife.detector.datainterpreter.Mailman
+import tech.onsibey.squarelife.simulator.entities.Board
+import tech.onsibey.squarelife.simulator.entities.Population.Companion.toPopulation
+import tech.onsibey.squarelife.visualisation.BoardView
 import java.io.File
-import java.util.Locale
+import java.util.*
 
 object Communicator {
-
 
     fun greetUser() {
         println("Welcome to the Square Life!")
@@ -52,6 +55,25 @@ object Communicator {
                 return absolutePath
             } catch (e: IllegalArgumentException) {
                 println("Photo not found in your path!")
+            }
+        }
+    }
+
+    fun getCorrectPhotoInterpretationConfirmation(mail: Mailman): Boolean {
+        println("Here is the result of photo interpretation:\n")
+
+        BoardView(mail.boardSize).run {
+            update(mail.entities.toPopulation(Board(mail.boardSize)).aliveEntitiesPositions())
+            print(toString())
+        }
+
+        println("Confirm, that your photo was interpreted correctly: Y/n")
+        while (true) {
+            val answer = readln()
+            when {
+                answer.uppercase(Locale.getDefault()) == "Y" -> return true
+                answer.uppercase(Locale.getDefault()) == "N" -> return false
+                else -> println("Enter Y or N!")
             }
         }
     }

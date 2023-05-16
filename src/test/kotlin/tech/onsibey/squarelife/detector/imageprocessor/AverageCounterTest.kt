@@ -8,33 +8,62 @@ import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getValueFr
 
 class AverageCounterTest {
     @Test
-    fun `GIVEN list of numbers WHEN value frequency is calculated THEN frequency map is returned`() {
-        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t2.jpg").processor
+    fun `GIVEN widths frequency maps for t1jpeg WHEN getAverageValueByNormalDistribution applied THEN average between 65 and 73 is returned`() {
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1.jpeg").processor
         val listOfWidths = WhiteLinesAnalyticalCapture.getHorizontalWhiteLines(imageProcessor)
+        val frequencyMapWidths = getValueFrequency(listOfWidths)
+        val averageWidth = getAverageValueByNormalDistribution(frequencyMapWidths, imageProcessor.width)
 
-        val frequencyMap = getValueFrequency(listOfWidths)
-
-        frequencyMap.toList().forEach {
-            println(it)
-        }
+        assertThat(averageWidth).isBetween(65, 73)
     }
 
     @Test
-    fun `GIVEN frequency maps WHEN getAverageValueByNormalDistribution applied THEN average between 65 and 73 and 71 and 83 is returned`() {
-        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t2.jpg").processor
-        val listOfWidths = WhiteLinesAnalyticalCapture.getHorizontalWhiteLines(imageProcessor)
+    fun `GIVEN heights frequency maps for t1jpeg WHEN getAverageValueByNormalDistribution applied THEN average between 71 and 83 is returned`() {
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1.jpeg").processor
         val listOfHeights = WhiteLinesAnalyticalCapture.getVerticalWhiteLines(imageProcessor)
-        val frequencyMapWidths = getValueFrequency(listOfWidths)
         val frequencyMapHeights = getValueFrequency(listOfHeights)
-
-        frequencyMapHeights.forEach { println(it) }
-
-        val averageWidth = getAverageValueByNormalDistribution(frequencyMapWidths, imageProcessor.width)
         val averageHeight = getAverageValueByNormalDistribution(frequencyMapHeights, imageProcessor.height)
-        println(averageWidth)
-        println(averageHeight)
 
-        assertThat(averageWidth).isBetween(65, 73)
         assertThat(averageHeight).isBetween(71, 83)
+    }
+
+    @Test
+    fun `GIVEN widths frequency maps for t1ejpeg WHEN getAverageValueByNormalDistribution applied THEN average between 94 and 105 is returned`() {
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1e.jpeg").processor
+        val listOfWidths = WhiteLinesAnalyticalCapture.getHorizontalWhiteLines(imageProcessor)
+        val frequencyMapWidths = getValueFrequency(listOfWidths)
+        val averageWidth = getAverageValueByNormalDistribution(frequencyMapWidths, imageProcessor.width)
+
+        assertThat(averageWidth).isBetween(94, 105)
+    }
+
+    @Test
+    fun `GIVEN heights frequency maps for t1ejpeg WHEN getAverageValueByNormalDistribution applied THEN average between 78 and 87 is returned`() {
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1e.jpeg").processor
+        val listOfHeights = WhiteLinesAnalyticalCapture.getVerticalWhiteLines(imageProcessor)
+        val frequencyMapHeights = getValueFrequency(listOfHeights)
+        val averageHeight = getAverageValueByNormalDistribution(frequencyMapHeights, imageProcessor.height)
+
+        assertThat(averageHeight).isBetween(78, 87)
+    }
+
+    @Test
+    fun `GIVEN widths frequency maps for t2jpeg WHEN getAverageValueByNormalDistribution applied THEN average between 352 and 393 is returned`() {
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t3.jpeg").processor
+        val listOfWidths = WhiteLinesAnalyticalCapture.getHorizontalWhiteLines(imageProcessor)
+        val frequencyMapWidths = getValueFrequency(listOfWidths)
+        val averageWidth = getAverageValueByNormalDistribution(frequencyMapWidths, imageProcessor.width)
+
+        assertThat(averageWidth).isBetween(352, 393)
+    }
+
+    @Test
+    fun `GIVEN frequency maps for t2jpeg WHEN getAverageValueByNormalDistribution applied THEN average between 343 and 383 is returned`() {
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t3.jpeg").processor
+        val listOfHeights = WhiteLinesAnalyticalCapture.getVerticalWhiteLines(imageProcessor)
+        val frequencyMapHeights = getValueFrequency(listOfHeights)
+        val averageHeight = getAverageValueByNormalDistribution(frequencyMapHeights, imageProcessor.height)
+
+        assertThat(averageHeight).isBetween(343, 383)
     }
 }

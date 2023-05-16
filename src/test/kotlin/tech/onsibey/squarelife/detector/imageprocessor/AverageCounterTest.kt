@@ -9,7 +9,7 @@ import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getValuesB
 class AverageCounterTest {
     @Test
     fun `GIVEN widths frequency maps for t1jpeg WHEN getAverageValueByNormalDistribution applied THEN average between 65 and 73 is returned`() {
-        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1e.jpeg").processor
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/pres1.jpeg").processor
         val listOfWidths = WhiteLinesAnalyticalCapture.getHorizontalWhiteLines(imageProcessor)
         val frequencyMapWidths = getValueFrequency(listOfWidths)
         val averageWidths = getValuesByNormalDistribution(frequencyMapWidths)
@@ -32,7 +32,7 @@ class AverageCounterTest {
 
     @Test
     fun `GIVEN widths frequency maps for t1ejpeg WHEN getAverageValueByNormalDistribution applied THEN average between 94 and 105 is returned`() {
-        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1e.jpeg").processor
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/pres1.jpeg").processor
         val listOfWidths = WhiteLinesAnalyticalCapture.getHorizontalWhiteLines(imageProcessor)
         val frequencyMapWidths = getValueFrequency(listOfWidths)
         val averageWidth = getValuesByNormalDistribution(frequencyMapWidths, imageProcessor.width)
@@ -42,7 +42,7 @@ class AverageCounterTest {
 
     @Test
     fun `GIVEN heights frequency maps for t1ejpeg WHEN getAverageValueByNormalDistribution applied THEN average between 78 and 87 is returned`() {
-        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t1e.jpeg").processor
+        val imageProcessor = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/pres1.jpeg").processor
         val listOfHeights = WhiteLinesAnalyticalCapture.getVerticalWhiteLines(imageProcessor)
         val frequencyMapHeights = getValueFrequency(listOfHeights)
         val averageHeight = getValuesByNormalDistribution(frequencyMapHeights, imageProcessor.height)

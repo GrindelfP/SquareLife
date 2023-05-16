@@ -3,8 +3,6 @@ package tech.onsibey.squarelife.detector.imageprocessor
 import ij.process.ImageProcessor
 import tech.onsibey.squarelife.detector.imageprocessor.BoardRecognizer.getBoardParameters
 import java.awt.Rectangle
-import java.io.File
-import javax.imageio.ImageIO
 
 interface GridCellsRecognition {
     fun divideImageByGrid(imageProcessor: ImageProcessor, cellParameters: CellParameters): List<List<ImageProcessor>>
@@ -13,7 +11,10 @@ interface GridCellsRecognition {
 }
 
 object ImageJGridCellRecognition : GridCellsRecognition {
-    override fun divideImageByGrid(imageProcessor: ImageProcessor, cellParameters: CellParameters): List<List<ImageProcessor>> {
+    override fun divideImageByGrid(
+        imageProcessor: ImageProcessor,
+        cellParameters: CellParameters
+    ): List<List<ImageProcessor>> {
         val cells = mutableListOf<MutableList<ImageProcessor>>()
         val boardParameters = getBoardParameters(imageProcessor, cellParameters)
 
@@ -25,17 +26,20 @@ object ImageJGridCellRecognition : GridCellsRecognition {
         for (y in 0 until numberOfColumns) {
             val row = mutableListOf<ImageProcessor>()
             for (x in 0 until numberOfRows) {
-                imageProcessor.roi = Rectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight)
+                var requiredWidth = cellWidth
+                if (x * cellWidth + requiredWidth > imageProcessor.width) {
+                    requiredWidth = imageProcessor.width - x * cellWidth
+                }
+                var requiredHeight = cellHeight
+                if (y * cellHeight + requiredHeight > imageProcessor.height) {
+                    requiredHeight = imageProcessor.height - y * cellHeight
+                }
+                if (x * cellWidth > imageProcessor.width || y * cellHeight > imageProcessor.height) break
+
+                imageProcessor.roi = Rectangle(x * cellWidth, y * cellHeight, requiredWidth, requiredHeight)
                 row.add(imageProcessor.crop())
             }
             cells.add(row)
-        }
-
-        // writing of image parts, not needed on release!
-        cells.forEachIndexed { x, row ->
-            row.forEachIndexed { y, cell ->
-                ImageIO.write(cell.bufferedImage, "jpg", File("cells/$x, $y.jpg"))
-            }
         }
 
         return cells

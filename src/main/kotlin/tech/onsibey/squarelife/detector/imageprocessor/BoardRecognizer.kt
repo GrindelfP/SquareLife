@@ -8,6 +8,7 @@ import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getValuesB
 import tech.onsibey.squarelife.detector.imageprocessor.LineCapture.Companion.MAX_LINE_RATIO
 import tech.onsibey.squarelife.detector.imageprocessor.LineCapture.Companion.MIN_LINE_RATIO
 import tech.onsibey.squarelife.detector.imageprocessor.Processor.COLOR_THRESHOLD
+import java.io.File
 import kotlin.math.roundToInt
 
 interface Recognizer {
@@ -18,7 +19,7 @@ interface Recognizer {
 interface LineCapture {
 
     companion object {
-        internal const val MIN_LINE_RATIO = 0.01
+        internal const val MIN_LINE_RATIO = 0.03
         internal const val MAX_LINE_RATIO = 0.5
     }
 
@@ -53,21 +54,29 @@ object BoardRecognizer : Recognizer {
         val listOfHeights = WhiteLinesAnalyticalCapture.getVerticalWhiteLines(imageProcessor)
 
         // uncomment for debug
-        /*val widths = listOfWidths.sorted().joinToString("\n", prefix = "")
+        val widths = listOfWidths.sorted().joinToString("\n", prefix = "")
         val heights = listOfHeights.sorted().joinToString("\n", prefix = "")
 
         File("widths.txt").writeText(widths)
-        File("heights.txt").writeText(heights)*/
+        File("heights.txt").writeText(heights)
 
         require(listOfWidths.isNotEmpty() && listOfHeights.isNotEmpty()) { "No cells found!" }
 
         val widthsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfWidths))
         val heightsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfHeights))
 
-        return widthsFrequencyMap.zip(heightsFrequencyMap).map { (width, height) ->
+        /*return widthsFrequencyMap.zip(heightsFrequencyMap).map { (width, height) ->
+            CellParameters(width, height)
+        } */
+        return widthsFrequencyMap.cartesianProduct(heightsFrequencyMap).map { (width, height) ->
             CellParameters(width, height)
         }
     }
+
+    fun <S, T> List<S>.cartesianProduct(other : List<T>) : List<Pair<S, T>> =
+        this.flatMap { s ->
+            List(other.size) { s }.zip(other)
+        }
 }
 
 object WhiteLinesParetoCapture : LineCapture {

@@ -2,6 +2,8 @@ package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.IJ
 import ij.process.ImageProcessor
+import tech.onsibey.squarelife.detector.imageprocessor.BoardRecognizer.getCellParameters
+import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
 import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.recognizeDominantColours
 import java.awt.Rectangle
 import java.io.File
@@ -29,13 +31,47 @@ object Processor {
         // Uncomment to save and take a look at the cropped picture
         ImageIO.write(isolatedGameBoardProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
 
-        // split image into cells
+        // sizes
+        // for each size get list<list<image>>, count arguable cells
+        // make list of variants with count of arguable cells
+        // pick the best variant
+
+        val cellParameters = getCellParameters(isolatedGameBoardProcessor) // (4,1) (4,2) (4,3) 51 52 53 61 62 63
+
+        val cellDivisionVariants = cellParameters.map { parameterVariant ->
+            divideImageByGrid(isolatedGameBoardProcessor, parameterVariant)
+        }
+
+        val cells = cellDivisionVariants.minBy { variant ->
+            variant.flatten().count { cell ->
+                cell.countColors().neitherColorIsDominating()
+            }
+        }
+
+        // writing of image parts, not needed on release!
+        cells.forEachIndexed { x, row ->
+            row.forEachIndexed { y, cell ->
+                ImageIO.write(cell.bufferedImage, "jpg", File("cells/$x, $y.jpg"))
+            }
+        }
+
         //val cells: List<List<ImageProcessor>> = divideImageByGrid(isolatedGameBoardProcessor)
 
+        val cellsColors: List<List<Color>> = recognizeDominantColours(cells) // get each sell's colour (black or white)
 
-        val cellsColors: List<List<Color>> = recognizeDominantColours(/*cells*/emptyList()) // get each sell's colour (black or white)
+        val cellsF = convertToCells(cellsColors) // interpret colors
 
-        return convertToCells(cellsColors) // interpret colors
+        // Uncomment for debug
+        val stringBuilder = StringBuilder()
+        cellsF.forEach { row ->
+            row.forEach { cellF ->
+                stringBuilder.append(if (cellF.isPainted) "██" else "░░")
+            }
+            stringBuilder.append("\n")
+        }
+        File("testos.txt").writeText(stringBuilder.toString())
+
+        return cellsF
     }
 
     private fun convertToCells(analyzedGrid: List<List<Color>>): List<List<Cell>> { // TESTED
@@ -107,21 +143,12 @@ data class Cell(var isPainted: Boolean) {
 }
 
 fun ImageProcessor.dominantColour(): Color {
-    val toleranceThreshold = 0.6 // 60% of the image should be of the same color
     val pixelsCount = this.width * this.height
     val colors = this.countColors()
 
     // we need to check if we've covered all the pixels for color percentage checking
     require(pixelsCount == colors.numberOfLightPixels + colors.numberOfDarkPixels)
     { "Not all pixels are checked by color" }
-    
-    fun PixelColorCounter.colorIsDominating(isDark: Boolean): Boolean = when {
-        isDark -> numberOfDarkPixels.toDouble() / pixelsCount >= toleranceThreshold
-        else -> numberOfLightPixels.toDouble() / pixelsCount >= toleranceThreshold
-    }
-
-    fun PixelColorCounter.neitherColorIsDominating(): Boolean =
-        !this.colorIsDominating(isDark = true) && !this.colorIsDominating(isDark = false)
 
     return when {
         colors.colorIsDominating(isDark = false) -> Color.WHITE
@@ -172,4 +199,19 @@ fun ImageProcessor.getColor(x: Int, y: Int): Color {
     return if (pixelColourRGB > Processor.COLOR_THRESHOLD) Color.WHITE else Color.BLACK
 }
 
-data class PixelColorCounter(val numberOfLightPixels: Int, val numberOfDarkPixels: Int)
+data class PixelColorCounter(val numberOfLightPixels: Int, val numberOfDarkPixels: Int) {
+    companion object {
+        const val toleranceThreshold = 0.6 // 60% of the image should be of the same color
+    }
+
+    private val pixelsCount = numberOfLightPixels + numberOfDarkPixels
+
+    fun colorIsDominating(isDark: Boolean): Boolean = when {
+        isDark -> numberOfDarkPixels.toDouble() / pixelsCount >= toleranceThreshold
+        else -> numberOfLightPixels.toDouble() / pixelsCount >= toleranceThreshold
+    }
+
+    fun neitherColorIsDominating(): Boolean =
+        !this.colorIsDominating(isDark = true) && !this.colorIsDominating(isDark = false)
+
+}

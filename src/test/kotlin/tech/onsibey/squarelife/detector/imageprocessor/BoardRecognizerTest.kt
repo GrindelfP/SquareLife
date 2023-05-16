@@ -43,7 +43,7 @@ class BoardRecognizerTest {
 
     @Test
     fun `GIVEN image of board with 100 cells WHEN applying getCellParameters() THEN returns cell size is between 65x75 and 72x83`() {
-        val imageWithWrapper = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t2.jpg")
+        val imageWithWrapper = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/t2.jpeg")
         val image = imageWithWrapper.processor
         val cellParameters = getCellParameters(image)
 

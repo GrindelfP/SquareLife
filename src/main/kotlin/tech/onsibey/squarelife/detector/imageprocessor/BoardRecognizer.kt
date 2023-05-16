@@ -1,6 +1,8 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.process.ImageProcessor
+import tech.onsibey.squarelife.detector.imageprocessor.Average.Companion.EDGES_COUNT
+import tech.onsibey.squarelife.detector.imageprocessor.Average.Companion.EDGE_RATIO
 import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getAverageValueByNormalDistribution
 import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getValueFrequency
 import tech.onsibey.squarelife.detector.imageprocessor.LineCapture.Companion.MAX_LINE_RATIO
@@ -17,7 +19,7 @@ interface Recognizer {
 interface LineCapture {
 
     companion object {
-        internal const val MIN_LINE_RATIO = 0.01
+        internal const val MIN_LINE_RATIO = 0.03
         internal const val MAX_LINE_RATIO = 0.5
     }
 
@@ -26,8 +28,23 @@ interface LineCapture {
     fun getVerticalWhiteLines(imageProcessor: ImageProcessor): List<Int>
 }
 
+interface Average {
+
+    companion object {
+        internal const val EDGES_COUNT = 40
+        internal const val EDGE_RATIO = 1.0 / EDGES_COUNT
+    }
+
+    fun getValueFrequency(dataList: List<Int>): Array<EdgeSample>
+
+    fun getAverageValueByNormalDistribution(edgesArray: Array<EdgeSample>, dimension: Int): Int
+}
+
 object BoardRecognizer : Recognizer {
-    override fun getBoardParameters(imageProcessor: ImageProcessor, cellParameters: CellParameters): BoardParameters {
+    override fun getBoardParameters(
+        imageProcessor: ImageProcessor,
+        cellParameters: CellParameters
+    ): BoardParameters {
         val numberOfRows = ((imageProcessor.height).toDouble() / (cellParameters.height).toDouble()).roundToInt()
         val numberOfColumns = ((imageProcessor.width).toDouble() / (cellParameters.width).toDouble()).roundToInt()
 
@@ -45,15 +62,6 @@ object BoardRecognizer : Recognizer {
         File("heights.txt").writeText(heights)
 
         require(listOfWidths.isNotEmpty() && listOfHeights.isNotEmpty()) { "No cells found!" }
-
-        // 1. Find the most common width and height intervals
-        // 2. Find the average width and height of these most common intervals
-        // 3. Check if image.width / averageWidth and image.height / averageHeight remains in appropriate range e. g.
-        // 723 % 71 = 13, 723 % 84 = 51 , so 71 is best
-        // use this averages as cell parameters
-
-        /*val averageWidth = SingleCriteriaParetoSet(listOfWidths, 10).averageInt()
-        val averageHeights = SingleCriteriaParetoSet(listOfHeights, 10).averageInt()*/
 
         val widthsFrequencyMap = getValueFrequency(listOfWidths)
         val heightsFrequencyMap = getValueFrequency(listOfHeights)
@@ -172,12 +180,9 @@ object WhiteLinesAnalyticalCapture : LineCapture {
 
 }
 
-object AverageCounter {
+object AverageCounter: Average {
 
-    private const val EDGE_RATIO = 1.0 / 40
-    private const val EDGES_COUNT = 40
-
-    fun getValueFrequency(dataList: List<Int>): Array<EdgeSample> {
+    override fun getValueFrequency(dataList: List<Int>): Array<EdgeSample> {
         require(dataList.isNotEmpty()) { "No data to aggregate frequency!" }
 
         val frequencyCounter = Array(EDGES_COUNT + 1) { EdgeSample(0, 0, 0) }
@@ -194,7 +199,7 @@ object AverageCounter {
         return frequencyCounter
     }
 
-    fun getAverageValueByNormalDistribution(edgesArray: Array<EdgeSample>, dimension: Int): Int {
+    override fun getAverageValueByNormalDistribution(edgesArray: Array<EdgeSample>, dimension: Int): Int {
         require(edgesArray.isNotEmpty()) { "No data to aggregate frequency!" }
 
         val edgesArrayForProcessing = edgesArray.toList() // copying container to list
@@ -218,10 +223,6 @@ object AverageCounter {
 
         return currentEdge.average()
     }
-
-    data class EdgeSample(val leftEdge: Int, val rightEdge: Int, val frequency: Int) {
-        fun average() = ((rightEdge + leftEdge).toDouble() / 2).roundToInt()
-    }
 }
 
 data class Coordinate(val x: Int, val y: Int)
@@ -229,3 +230,7 @@ data class Coordinate(val x: Int, val y: Int)
 data class CellParameters(val width: Int, val height: Int)
 
 data class BoardParameters(val numberOfRows: Int, val numberOfColumns: Int)
+
+data class EdgeSample(val leftEdge: Int, val rightEdge: Int, val frequency: Int) {
+    fun average() = ((rightEdge + leftEdge).toDouble() / 2).roundToInt()
+}

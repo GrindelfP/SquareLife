@@ -1,6 +1,8 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.process.ImageProcessor
+import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getAverageValueByNormalDistribution
+import tech.onsibey.squarelife.detector.imageprocessor.AverageCounter.getValueFrequency
 import tech.onsibey.squarelife.detector.imageprocessor.LineCapture.Companion.MAX_LINE_RATIO
 import tech.onsibey.squarelife.detector.imageprocessor.LineCapture.Companion.MIN_LINE_RATIO
 import tech.onsibey.squarelife.detector.imageprocessor.Processor.COLOR_THRESHOLD
@@ -24,7 +26,7 @@ interface LineCapture {
     fun getVerticalWhiteLines(imageProcessor: ImageProcessor): List<Int>
 }
 
-object BoardRecognizer: Recognizer {
+object BoardRecognizer : Recognizer {
     override fun getBoardParameters(imageProcessor: ImageProcessor, cellParameters: CellParameters): BoardParameters {
         val numberOfRows = ((imageProcessor.height).toDouble() / (cellParameters.height).toDouble()).roundToInt()
         val numberOfColumns = ((imageProcessor.width).toDouble() / (cellParameters.width).toDouble()).roundToInt()
@@ -50,14 +52,20 @@ object BoardRecognizer: Recognizer {
         // 723 % 71 = 13, 723 % 84 = 51 , so 71 is best
         // use this averages as cell parameters
 
-        val averageWidth = SingleCriteriaParetoSet(listOfWidths, 10).averageInt()
-        val averageHeights = SingleCriteriaParetoSet(listOfHeights, 10).averageInt()
+        /*val averageWidth = SingleCriteriaParetoSet(listOfWidths, 10).averageInt()
+        val averageHeights = SingleCriteriaParetoSet(listOfHeights, 10).averageInt()*/
+
+        val widthsFrequencyMap = getValueFrequency(listOfWidths)
+        val heightsFrequencyMap = getValueFrequency(listOfHeights)
+
+        val averageWidth = getAverageValueByNormalDistribution(widthsFrequencyMap, imageProcessor.width)
+        val averageHeights = getAverageValueByNormalDistribution(heightsFrequencyMap, imageProcessor.height)
 
         return CellParameters(averageWidth, averageHeights)
     }
 }
 
-object WhiteLinesParetoCapture: LineCapture {
+object WhiteLinesParetoCapture : LineCapture {
     private const val MIN_LINE_LENGTH = 2
 
     override fun getHorizontalWhiteLines(imageProcessor: ImageProcessor): List<Int> {
@@ -99,7 +107,7 @@ object WhiteLinesParetoCapture: LineCapture {
     }
 }
 
-object WhiteLinesAnalyticalCapture: LineCapture {
+object WhiteLinesAnalyticalCapture : LineCapture {
     override fun getHorizontalWhiteLines(imageProcessor: ImageProcessor): List<Int> {
         val croppedImageWidth = imageProcessor.width
         val croppedImageHeight = imageProcessor.height
@@ -112,7 +120,7 @@ object WhiteLinesAnalyticalCapture: LineCapture {
                 monochromeImageRepresentation[y][x] = pixelColor > COLOR_THRESHOLD
             }
         }
-        
+
         val lines = mutableListOf<Int>()
         monochromeImageRepresentation.forEach { row ->
             var counter = 0
@@ -122,6 +130,7 @@ object WhiteLinesAnalyticalCapture: LineCapture {
                         lines.add(counter)
                         counter = 0
                     }
+
                     else -> ++counter
                 }
             }
@@ -153,6 +162,7 @@ object WhiteLinesAnalyticalCapture: LineCapture {
                         lines.add(counter)
                         counter = 0
                     }
+
                     else -> ++counter
                 }
             }
@@ -160,6 +170,58 @@ object WhiteLinesAnalyticalCapture: LineCapture {
         return lines.filter { integer -> integer > imageProcessor.height * MIN_LINE_RATIO && integer < imageProcessor.height * MAX_LINE_RATIO }
     }
 
+}
+
+object AverageCounter {
+
+    private const val EDGE_RATIO = 1.0 / 40
+    private const val EDGES_COUNT = 40
+
+    fun getValueFrequency(dataList: List<Int>): Array<EdgeSample> {
+        require(dataList.isNotEmpty()) { "No data to aggregate frequency!" }
+
+        val frequencyCounter = Array(EDGES_COUNT + 1) { EdgeSample(0, 0, 0) }
+        dataList.sorted()
+
+        val edge = (dataList.max() - dataList.min()).toDouble() * EDGE_RATIO
+        for (i in 0 until EDGES_COUNT) {
+            val leftEdge = dataList.min() + (edge * i).toInt()
+            val rightEdge = dataList.min() + (edge * (i + 1)).toInt()
+            val frequency = dataList.count { integer -> integer in leftEdge until rightEdge }
+            frequencyCounter[i] = EdgeSample(leftEdge, rightEdge, frequency)
+        }
+
+        return frequencyCounter
+    }
+
+    fun getAverageValueByNormalDistribution(edgesArray: Array<EdgeSample>, dimension: Int): Int {
+        require(edgesArray.isNotEmpty()) { "No data to aggregate frequency!" }
+
+        val edgesArrayForProcessing = edgesArray.toList() // copying container to list
+        var currentEdge = edgesArray.maxBy { it.frequency } // picking the most frequent edge
+        edgesArrayForProcessing.filter { edge -> edge != currentEdge } // removing the most frequent edge from container
+        // calculating the modulus of division the dimension on the most frequent edge
+        var thisEdgeCriteria = dimension % currentEdge.frequency
+        // initializing the previous edge criteria with max value for the loop
+        var previousEdgeCriteria = Int.MAX_VALUE
+
+        while (thisEdgeCriteria < previousEdgeCriteria) {
+            // saving the previous edge criteria
+            previousEdgeCriteria = thisEdgeCriteria
+            // picking the remaining most frequent edge
+            currentEdge = edgesArrayForProcessing.maxBy { edge -> edge.frequency }
+            // removing the most frequent edge from container
+            edgesArrayForProcessing.filter { edge -> edge != currentEdge }
+            // calculating the modulus of division the dimension on the most frequent edge
+            thisEdgeCriteria = dimension % currentEdge.frequency
+        }
+
+        return currentEdge.average()
+    }
+
+    data class EdgeSample(val leftEdge: Int, val rightEdge: Int, val frequency: Int) {
+        fun average() = ((rightEdge + leftEdge).toDouble() / 2).roundToInt()
+    }
 }
 
 data class Coordinate(val x: Int, val y: Int)

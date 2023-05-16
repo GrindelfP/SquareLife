@@ -33,7 +33,6 @@ interface Average {
     companion object {
         internal const val INTERVALS_COUNT = 40
         internal const val INTERVAL_RATIO = 1.0 / INTERVALS_COUNT
-        internal const val SAMPLES_LIMIT = 3
     }
 
     fun getValueFrequency(dataList: List<Int>): Array<Interval>
@@ -62,8 +61,8 @@ object BoardRecognizer : Recognizer {
 
         require(listOfWidths.isNotEmpty() && listOfHeights.isNotEmpty()) { "No cells found!" }
 
-        val widthsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfWidths))
-        val heightsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfHeights))
+        val widthsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfWidths)).filter { it != 0 }
+        val heightsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfHeights)).filter { it != 0 }
 
         /*return widthsFrequencyMap.zip(heightsFrequencyMap).map { (width, height) ->
             CellParameters(width, height)
@@ -250,6 +249,7 @@ data class Interval(
     constructor() : this(0, 0, 0, listOf(IntervalElement()))
 
     fun average(): Int {
+        if (intervalElements.isEmpty()) return 0
         val sum = intervalElements.sumOf { value -> value.value * value.frequency }
 
         return (sum.toDouble() / this.frequencySum).roundToInt()

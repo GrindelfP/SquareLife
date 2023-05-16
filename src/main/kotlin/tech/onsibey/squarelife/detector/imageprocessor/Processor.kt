@@ -2,7 +2,6 @@ package tech.onsibey.squarelife.detector.imageprocessor
 
 import ij.IJ
 import ij.process.ImageProcessor
-import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.divideImageByGrid
 import tech.onsibey.squarelife.detector.imageprocessor.ImageJGridCellRecognition.recognizeDominantColours
 import java.awt.Rectangle
 import java.io.File
@@ -14,19 +13,6 @@ object Processor {
 
     fun processImageBoard(pathToImage: String): ImageBoard = ImageBoard(cells(File(pathToImage)))
 
-    private fun convertToCells(analyzedGrid: List<List<Color>>): List<List<Cell>> { // TESTED
-        val cells = mutableListOf<MutableList<Cell>>()
-        analyzedGrid.forEach { row ->
-            val rowCells = mutableListOf<Cell>()
-            row.forEach { cell ->
-                val interpretedCell = if (cell == Color.BLACK) Cell(true) else Cell(false)
-                rowCells.add(interpretedCell)
-            }
-            cells.add(rowCells)
-        }
-
-        return cells
-    }
 
     private fun cells(file: File): List<List<Cell>> {
         val imagePlus = IJ.openImage(file.absolutePath)
@@ -44,11 +30,26 @@ object Processor {
         ImageIO.write(isolatedGameBoardProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
 
         // split image into cells
-        val cells: List<List<ImageProcessor>> = divideImageByGrid(isolatedGameBoardProcessor)
+        //val cells: List<List<ImageProcessor>> = divideImageByGrid(isolatedGameBoardProcessor)
 
-        val cellsColors: List<List<Color>> = recognizeDominantColours(cells) // get each sell's colour (black or white)
+
+        val cellsColors: List<List<Color>> = recognizeDominantColours(/*cells*/emptyList()) // get each sell's colour (black or white)
 
         return convertToCells(cellsColors) // interpret colors
+    }
+
+    private fun convertToCells(analyzedGrid: List<List<Color>>): List<List<Cell>> { // TESTED
+        val cells = mutableListOf<MutableList<Cell>>()
+        analyzedGrid.forEach { row ->
+            val rowCells = mutableListOf<Cell>()
+            row.forEach { cell ->
+                val interpretedCell = if (cell == Color.BLACK) Cell(true) else Cell(false)
+                rowCells.add(interpretedCell)
+            }
+            cells.add(rowCells)
+        }
+
+        return cells
     }
 
     private fun ImageProcessor.isolatedGameBoard(): ImageProcessor {

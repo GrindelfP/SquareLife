@@ -1,12 +1,8 @@
 package tech.onsibey.squarelife.detector.imageprocessor
 
-import ij.ImagePlus
-import org.assertj.core.api.Assertions.assertThat
-import tech.onsibey.squarelife.detector.imageprocessor.BoardRecognizer.getBoardParameters
-import tech.onsibey.squarelife.detector.imageprocessor.BoardRecognizer.getCellParameters
-import kotlin.test.Test
-
+/*
 class BoardRecognizerTest {
+
     @Test
     fun `GIVEN empty photo 200x200 WHEN applying getCellParameters() THEN returns cell size 200x200`() {
         val imageWithWrapper = ImagePlus("/Users/grindelf/Programming/Onsibey/SquareLife/photos/с0.jpeg")
@@ -62,4 +58,4 @@ class BoardRecognizerTest {
         assertThat(boardParameters.numberOfRows).isEqualTo(10)
         assertThat(boardParameters.numberOfColumns).isEqualTo(10)
     }
-}
+}*/

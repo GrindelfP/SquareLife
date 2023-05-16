@@ -59,5 +59,3 @@ object ImageJGridCellRecognition : GridCellsRecognition {
         return cellsByColors
     }
 }
-
-data class CellsDistribution(val cells: List<List<ImageProcessor>>, val meanColorDominance: Double)

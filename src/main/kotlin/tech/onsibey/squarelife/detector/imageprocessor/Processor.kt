@@ -23,20 +23,10 @@ object Processor {
         // cropping the image to the size of the grid
         val isolatedGameBoardProcessor = imagePlus.processor.isolatedGameBoard()
 
-        /*isolatedGameBoardProcessor.filter(MIN) // Trying to smooth the color of the image
-        repeat(30) {
-            isolatedGameBoardProcessor.smooth()
-        }*/
-
-        // Uncomment to save and take a look at the cropped picture
+       // Uncomment for debug
         ImageIO.write(isolatedGameBoardProcessor.bufferedImage, "jpg", File("cropped-preprocessed.jpg"))
 
-        // sizes
-        // for each size get list<list<image>>, count arguable cells
-        // make list of variants with count of arguable cells
-        // pick the best variant
-
-        val cellParameters = getCellParameters(isolatedGameBoardProcessor) // (4,1) (4,2) (4,3) 51 52 53 61 62 63
+        val cellParameters = getCellParameters(isolatedGameBoardProcessor)
 
         val cellDivisionVariants = cellParameters.map { parameterVariant ->
             divideImageByGrid(isolatedGameBoardProcessor, parameterVariant)
@@ -55,7 +45,6 @@ object Processor {
             }
         }
 
-        //val cells: List<List<ImageProcessor>> = divideImageByGrid(isolatedGameBoardProcessor)
 
         val cellsColors: List<List<Color>> = recognizeDominantColours(cells) // get each sell's colour (black or white)
 
@@ -180,7 +169,7 @@ fun ImageProcessor.countColors(): PixelColorCounter {
     return PixelColorCounter(numberOfLightPixels, numberOfDarkPixels)
 }
 
-private fun ImageProcessor.similarQuarterRectangle(): ImageProcessor {
+fun ImageProcessor.similarQuarterRectangle(): ImageProcessor {
     val iterationsCoordinateCoefficient = 0.25
     val iterationsSizeCoefficient = 0.5
 

@@ -33,12 +33,11 @@ interface Average {
     companion object {
         internal const val INTERVALS_COUNT = 40
         internal const val INTERVAL_RATIO = 1.0 / INTERVALS_COUNT
-        internal const val SAMPLES_LIMIT = 3
     }
 
     fun getValueFrequency(dataList: List<Int>): Array<Interval>
 
-    fun getValuesByNormalDistribution(edgesArray: Array<Interval>): List<Int>
+    fun getValuesByNormalDistribution(intervalsArray: Array<Interval>): List<Int>
 }
 
 object BoardRecognizer : Recognizer {
@@ -65,15 +64,12 @@ object BoardRecognizer : Recognizer {
         val widthsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfWidths))
         val heightsFrequencyMap = getValuesByNormalDistribution(getValueFrequency(listOfHeights))
 
-        /*return widthsFrequencyMap.zip(heightsFrequencyMap).map { (width, height) ->
-            CellParameters(width, height)
-        } */
         return widthsFrequencyMap.cartesianProduct(heightsFrequencyMap).map { (width, height) ->
             CellParameters(width, height)
         }
     }
 
-    fun <S, T> List<S>.cartesianProduct(other : List<T>) : List<Pair<S, T>> =
+    private fun <S, T> List<S>.cartesianProduct(other : List<T>) : List<Pair<S, T>> =
         this.flatMap { s ->
             List(other.size) { s }.zip(other)
         }
@@ -222,14 +218,14 @@ object AverageCounter : Average {
         return frequencyMap
     }
 
-    override fun getValuesByNormalDistribution(edgesArray: Array<Interval>): List<Int> {
-        require(edgesArray.isNotEmpty()) { "No data to aggregate frequency!" }
+    override fun getValuesByNormalDistribution(intervalsArray: Array<Interval>): List<Int> {
+        require(intervalsArray.isNotEmpty()) { "No data to aggregate frequency!" }
 
-        val mostFrequent = edgesArray.maxBy { edgeSample -> edgeSample.frequencySum }
+        val mostFrequent = intervalsArray.maxBy { edgeSample -> edgeSample.frequencySum }
         val neighbours = Pair(
-            edgesArray[edgesArray.indexOf(mostFrequent) - 1],
-            edgesArray[edgesArray.indexOf(mostFrequent) + 1]
-        ).toList().sortedBy { edgeSample -> edgeSample.frequencySum }
+            intervalsArray[intervalsArray.indexOf(mostFrequent) - 1],
+            intervalsArray[intervalsArray.indexOf(mostFrequent) + 1]
+        ).toList().sortedBy { interval -> interval.frequencySum }
 
         return listOf(mostFrequent.average(), neighbours[0].average(), neighbours[1].average())
     }

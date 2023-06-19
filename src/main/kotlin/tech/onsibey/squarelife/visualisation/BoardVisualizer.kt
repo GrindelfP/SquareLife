@@ -95,6 +95,7 @@ class GifEvolutionCycleGenerator(private val evolutionResultReport: EvolutionRes
         private val BLUE = Color(0, 191, 255)
         private val GREEN = Color(46, 139, 87)
         private val RED = Color(255, 69, 0)
+        private val MAGENTA = Color(255, 0, 255)
 
         private val TEMP_FILE_DIR = File("temp").run {
             when {
@@ -142,19 +143,29 @@ class GifEvolutionCycleGenerator(private val evolutionResultReport: EvolutionRes
     private fun Graphics2D.drawEntities(entities: List<EntityPosition>) {
         (0 until evolutionResultReport.boardSize.numberOfRows).forEach { y ->
             (0 until evolutionResultReport.boardSize.rowLength).forEach { x ->
-                // we are using a hack here: entities are drawn with a shift of 1 pixel to the right and to the bottom
-                when (val entity = entities.find { it.position.contains(Coordinate(x/* + 1*/, y/* + 1*/)) }) {
-                    null -> {
+                val entitiesOnCoordinate = entities.filter { it.position.contains(Coordinate(x, y)) }
+                when {
+                    entitiesOnCoordinate.isEmpty() -> {
                         color = GREY
                         fillRect(x * TILE_SIZE + 1, y * TILE_SIZE + 1, TILE_FILL_SIZE, TILE_FILL_SIZE)
                     }
 
                     else -> {
-                        color = when (entity.type) {
-                            Kuvat::class -> GREEN
-                            Kuvahaku::class -> BLUE
-                            Uutiset::class -> RED
-                            else -> TODO("Handle unexpected entity type. Even if we know that it is not possible.")
+                        color = when (entitiesOnCoordinate.size) {
+                            1 -> when (entitiesOnCoordinate.first().type) {
+                                Kuvat::class -> GREEN
+                                Kuvahaku::class -> BLUE
+                                Uutiset::class -> RED
+                                else -> TODO("Handle unexpected entity type. Even if we know that it is not possible.")
+                            }
+
+                            else -> {
+                                val kuvahakus = entitiesOnCoordinate.filter { it.type == Kuvahaku::class }
+                                when (kuvahakus.size) {
+                                    1 -> BLUE
+                                    else -> MAGENTA
+                                }
+                            }
                         }
                         fillRect(x * TILE_SIZE + 1, y * TILE_SIZE + 1, TILE_FILL_SIZE, TILE_FILL_SIZE)
                     }

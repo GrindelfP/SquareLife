@@ -1,9 +1,9 @@
 package tech.onsibey.squarelife.simulator.powers
 
-import tech.onsibey.squarelife.simulator.entities.Population.Companion.generatePopulation
+import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
 import tech.onsibey.squarelife.simulator.entities.Board
 import tech.onsibey.squarelife.simulator.entities.BoardSize
-import tech.onsibey.squarelife.common.DEFAULT_EVOLUTION_CYCLES_LIMIT
+import tech.onsibey.squarelife.simulator.entities.Population.Companion.generatePopulation
 import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_BOARD_HORIZONTAL_SIDE_SIZE
 import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_BOARD_VERTICAL_SIDE_SIZE
 import tech.onsibey.squarelife.simulator.powers.IkuTursoConstants.STANDARD_NUMBER_OF_KUVAHAKU_IN_POPULATION
